@@ -49,6 +49,7 @@ function CabinRow({ cabin }) {
   const queryClient = useQueryClient();
 
   const { isLoading: isDeleting, mutate } = useMutation({
+    // mutationFn (mutation function) — untuk POST/PUT/DELETE
     mutationFn: deleteCabin,
     onSuccess: () => {
       toast.success('Cabin successfully deleted');
