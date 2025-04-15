@@ -71,7 +71,7 @@ function CreateCabinForm() {
   }
 
   function onError(errors) {
-    console.log(errors);
+    // console.log(errors);
   }
 
   return (
@@ -94,7 +94,14 @@ function CreateCabinForm() {
           id="discount"
           disabled={isCreating}
           defaultValue={0}
-          {...register('discount', { required: 'This field is required', validate: (value) => value <= getValues().regularPrice || 'Discount should be less than regular price' })}
+          {...register('discount', {
+            required: 'This field is required',
+            validate: (value) => {
+              const discount = Number(value);
+              const regularPrice = Number(getValues().regularPrice);
+              return discount <= regularPrice || 'Discount should be less than or equal to regular price';
+            },
+          })}
         />
       </FormRow>
 
