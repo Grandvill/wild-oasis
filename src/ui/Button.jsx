@@ -46,6 +46,14 @@ const variations = {
       background-color: var(--color-red-800);
     }
   `,
+  warning: css`
+    color: var(--color-grey-0);
+    background-color: #fbbf24; // kuning amber-400 Tailwind
+
+    &:hover {
+      background-color: #facc15; // amber-300
+    }
+  `,
 };
 
 const Button = styled.button`
