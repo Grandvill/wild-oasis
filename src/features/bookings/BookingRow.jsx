@@ -34,25 +34,19 @@ const Amount = styled.div`
   font-weight: 500;
 `;
 
-function BookingRow({
-  booking: {
-    id: bookingId,
-    created_at,
-    startDate,
-    endDate,
-    numNights,
-    numGuests,
-    totalPrice,
-    status,
-    guests: { fullName: guestName, email },
-    cabins: { name: cabinName },
-  },
-}) {
+function BookingRow({ booking }) {
+  const { id: bookingId, created_at, startDate, endDate, numNights, numGuests, totalPrice, status, guests, cabins } = booking;
+
+  const guestName = guests?.fullName || 'Unknown Guest';
+  const email = guests?.email || 'No email';
+  const cabinName = cabins?.name || 'Unknown Cabin';
+
   const statusToTagName = {
     unconfirmed: 'blue',
     'checked-in': 'green',
     'checked-out': 'silver',
   };
+  console.log(booking);
 
   return (
     <Table.Row>
@@ -68,11 +62,17 @@ function BookingRow({
           {isToday(new Date(startDate)) ? 'Today' : formatDistanceFromNow(startDate)} &rarr; {numNights} night stay
         </span>
         <span>
-          {format(new Date(startDate), 'MMM dd yyyy')} &mdash; {format(new Date(endDate), 'MMM dd yyyy')}
+          {startDate && endDate && !isNaN(new Date(startDate)) && !isNaN(new Date(endDate)) ? (
+            <>
+              {format(new Date(startDate), 'MMM dd yyyy')} &mdash; {format(new Date(endDate), 'MMM dd yyyy')}
+            </>
+          ) : (
+            'Invalid date'
+          )}
         </span>
       </Stacked>
 
-      <Tag type={statusToTagName[status]}>{status.replace('-', ' ')}</Tag>
+      <Tag type={statusToTagName[status]}>{status ? status.replace('-', ' ') : 'Unknown'}</Tag>
 
       <Amount>{formatCurrency(totalPrice)}</Amount>
     </Table.Row>
