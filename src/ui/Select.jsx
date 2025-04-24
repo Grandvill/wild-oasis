@@ -10,6 +10,7 @@ const StyledSelect = styled.select`
   box-shadow: var(--shadow-sm);
 `;
 
+// komponen dropdown select
 function Select({ options, value, onChange, ...props }) {
   return (
     <StyledSelect value={value} onChange={onChange} {...props}>
