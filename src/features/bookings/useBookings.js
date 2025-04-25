@@ -8,15 +8,22 @@ export function useBookings() {
   // 1. FILTER
   const filterValue = searchParams.get('status');
   const filter = !filterValue || filterValue === 'all' ? null : { field: 'status', value: filterValue };
+  // gte (greater than or equal) lte (less than or equal)
+  // { field: 'totalPrice', value: 5000, method: 'gte' };
+
+  // 2. SORT
+  const sortByRaw = searchParams.get('sortBy') || 'startDate-asc';
+  const [field, direction] = sortByRaw.split('-');
+  const sortBy = { field, direction };
 
   const {
     isLoading,
     data: bookings,
     error,
   } = useQuery({
-    queryKey: ['bookings', filter],
+    queryKey: ['bookings', filter, sortByRaw],
     // (query function) — untuk GET/fetch data
-    queryFn: () => getBookings({ filter }),
+    queryFn: () => getBookings({ filter, sortBy }),
   });
 
   return { bookings, isLoading, error };
