@@ -14,7 +14,7 @@ export function useBookings() {
     data: bookings,
     error,
   } = useQuery({
-    queryKey: ['cabins'],
+    queryKey: ['bookings', filter],
     // (query function) — untuk GET/fetch data
     queryFn: () => getBookings({ filter }),
   });
