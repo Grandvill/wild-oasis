@@ -26,7 +26,7 @@ export function useBookings() {
   } = useQuery({
     queryKey: ['bookings', filter, sortBy, page],
     // (query function) — untuk GET/fetch data
-    queryFn: () => getBookings({ filter, sortBy }),
+    queryFn: () => getBookings({ filter, sortBy, page }),
   });
 
   return { bookings, isLoading, error, count };
