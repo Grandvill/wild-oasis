@@ -46,7 +46,7 @@ function BookingRow({ booking }) {
     'checked-in': 'green',
     'checked-out': 'silver',
   };
-  console.log(booking);
+  // console.log(booking);
 
   return (
     <Table.Row>
