@@ -2,7 +2,7 @@ import { formatCurrency } from '../../utils/helpers';
 import Stat from './Stat';
 import { HiOutlineBanknotes, HiOutlineCalendarDays, HiOutlineChartBar, HiOutlineHomeModern } from 'react-icons/hi2';
 
-function Stats({ bookings, confirmedStays, numDays, cabinCount }) {
+function Stats({ bookings = [], confirmedStays = [], numDays = 1, cabinCount = 1 }) {
   // 1. Number of bookings
   const numBookings = bookings.length;
 
@@ -14,7 +14,7 @@ function Stats({ bookings, confirmedStays, numDays, cabinCount }) {
 
   // 4. Occupancy rate
   // num checked in nights / all available nights (num days * num cabins)
-  const occupation = confirmedStays.reduce((acc, cur) => acc + cur.numNights, 0) / (numDays * cabinCount);
+  const occupation = confirmedStays.reduce((acc, cur) => acc + cur.numNights, 0) / (numDays * cabinCount || 1);
 
   return (
     <>
