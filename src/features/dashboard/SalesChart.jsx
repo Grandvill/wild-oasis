@@ -56,10 +56,12 @@ function SalesChart({ bookings, numDays }) {
   });
 
   const data = allDates.map((date) => {
+    const dailyBookings = Array.isArray(bookings) ? bookings.filter((booking) => isSameDay(date, new Date(booking.created_at))) : [];
+
     return {
       label: format(date, 'MMM dd'),
-      totalSales: bookings.filter((booking) => isSameDay(date, new Date(booking.created_at))).reduce((acc, curr) => acc + curr.totalPrice, 0),
-      extrasSales: bookings.filter((booking) => isSameDay(date, new Date(booking.created_at))).reduce((acc, curr) => acc + curr.extrasPrice, 0),
+      totalSales: dailyBookings.reduce((acc, curr) => acc + (curr.totalPrice || 0), 0),
+      extrasSales: dailyBookings.reduce((acc, curr) => acc + (curr.extrasPrice || 0), 0),
     };
   });
 
