@@ -16,6 +16,7 @@ import AppLayout from './ui/AppLayout';
 import Booking from './pages/Booking';
 import Checkin from './pages/Checkin';
 import ProtectedRoute from './ui/ProtectedRoute';
+import LandingPage from './pages/LandingPage';
 import { DarkModeProvider } from './context/DarkModeContext';
 
 const queryClient = new QueryClient({
@@ -35,7 +36,7 @@ function App() {
         <GlobalStyles />
         <BrowserRouter>
           <Routes>
-            <Route index element={<Navigate replace to="/login" />} />
+            <Route index element={<LandingPage />} />
 
             <Route
               element={
