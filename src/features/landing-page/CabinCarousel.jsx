@@ -109,11 +109,12 @@ const CabinName = styled.div`
 
 function CabinsCarousel() {
   const cabins = [
-    { id: 1, name: 'Forest Retreat', img: 'https://source.unsplash.com/400x300/?cabin,forest' },
-    { id: 2, name: 'Lakeside Villa', img: 'https://source.unsplash.com/400x300/?cabin,lake' },
-    { id: 3, name: 'Mountain View', img: 'https://source.unsplash.com/400x300/?cabin,mountain' },
-    { id: 4, name: 'Cozy Cottage', img: 'https://source.unsplash.com/400x300/?cabin,cottage' },
-    { id: 5, name: 'Riverside Cabin', img: 'https://source.unsplash.com/400x300/?cabin,river' },
+    { id: 1, name: 'cabin-001', img: 'cabin-001.jpg' },
+    { id: 2, name: 'cabin-002', img: 'cabin-002.jpg' },
+    { id: 3, name: 'cabin-003', img: 'cabin-003.jpg' },
+    { id: 4, name: 'cabin-004', img: 'cabin-004.jpg' },
+    { id: 5, name: 'cabin-005', img: 'cabin-005.jpg' },
+    { id: 6, name: 'cabin-006', img: 'cabin-006.jpg' },
   ];
 
   return (
