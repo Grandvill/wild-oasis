@@ -59,6 +59,7 @@ const AboutText = styled.div`
   font-size: 1.8rem;
   color: var(--color-grey-700);
   line-height: 1.7;
+  text-align: justify;
 
   p {
     margin-bottom: 2rem;
@@ -93,7 +94,7 @@ const ImageWrapper = styled.div`
 
   img {
     width: 100%;
-    height: 100%;
+    height: 500px;
     object-fit: cover;
     display: block;
     transform: scale(1.01);
@@ -117,7 +118,7 @@ function About() {
             <p>Nikmati pengalaman menginap terbaik dengan layanan kami yang mengutamakan kepuasan dan kenyamanan Anda. Reservasi cepat, konfirmasi instan, dan dukungan pelanggan 24/7 adalah komitmen kami untuk Anda.</p>
           </AboutText>
           <ImageWrapper>
-            <img src="https://unsplash.com/photos/woman-sitting-on-bed-watching-by-the-window-during-winter-51adhgg5KkE" alt="Wild Oasis Resort" />
+            <img src="cabin-about.jpg" alt="Wild Oasis Resort" />
           </ImageWrapper>
         </AboutContent>
       </AboutContainer>
