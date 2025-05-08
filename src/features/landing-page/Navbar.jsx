@@ -14,10 +14,11 @@ const Nav = styled.nav`
   align-items: center;
   padding: 1.6rem 4rem;
 
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--backdrop-color);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-sm);
 `;
 
 const LogoWrapper = styled.div`
@@ -39,10 +40,10 @@ const NavLinks = styled.ul`
 
   a {
     font-weight: 500;
-    color: var(--color-grey-0);
+    color: var(--color-blue-700);
 
     &:hover {
-      color: var(--color-blue-100);
+      color: var(--color-brand-500);
     }
   }
 `;
@@ -54,8 +55,8 @@ const RightSection = styled.div`
 `;
 
 const LoginButton = styled(Link)`
-  background-color: var(--color-grey-0);
-  color: var(--color-blue-700);
+  background-color: var(--color-brand-600);
+  color: var(--color-grey-0);
   padding: 0.8rem 1.6rem;
   border-radius: var(--border-radius-sm);
   text-decoration: none;
@@ -64,7 +65,7 @@ const LoginButton = styled(Link)`
   box-shadow: var(--shadow-md);
 
   &:hover {
-    background-color: var(--color-blue-100);
+    background-color: var(--color-brand-700);
   }
 `;
 
