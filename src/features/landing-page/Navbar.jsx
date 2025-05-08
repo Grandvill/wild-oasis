@@ -1,7 +1,7 @@
-// components/Navbar.jsx
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import Logo from '../../ui/Logo'; // sesuaikan dengan path kamu
+import Logo from '../../ui/Logo';
+import DarkModeToggle from '../../ui/DarkModeToggle';
 
 const Nav = styled.nav`
   position: fixed;
@@ -18,6 +18,13 @@ const Nav = styled.nav`
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+`;
+
+const LogoWrapper = styled.div`
+  img {
+    height: 4.5rem !important;
+    width: auto;
+  }
 `;
 
 const LeftSection = styled.div`
@@ -40,6 +47,12 @@ const NavLinks = styled.ul`
   }
 `;
 
+const RightSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1.2rem; /* Ubah nilai ini untuk mengatur jarak antar elemen */
+`;
+
 const LoginButton = styled(Link)`
   background-color: var(--color-grey-0);
   color: var(--color-blue-700);
@@ -58,7 +71,10 @@ const LoginButton = styled(Link)`
 function Navbar() {
   return (
     <Nav>
-      <Logo />
+      <LogoWrapper>
+        <Logo />
+      </LogoWrapper>
+
       <LeftSection>
         <NavLinks>
           <li>
@@ -72,7 +88,11 @@ function Navbar() {
           </li>
         </NavLinks>
       </LeftSection>
-      <LoginButton to="/login">Login</LoginButton>
+
+      <RightSection>
+        <DarkModeToggle />
+        <LoginButton to="/login">Login</LoginButton>
+      </RightSection>
     </Nav>
   );
 }
