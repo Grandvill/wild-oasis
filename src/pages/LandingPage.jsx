@@ -4,6 +4,7 @@ import Hero from '../features/landing-page/Hero';
 import CabinsCarousel from '../features/landing-page/CabinCarousel';
 import About from '../features/landing-page/About';
 import ContactUs from '../features/landing-page/ContactUs';
+import Testimonials from '../features/landing-page/Testimonials';
 
 function Landing() {
   return (
@@ -12,6 +13,7 @@ function Landing() {
       <Hero />
       <CabinsCarousel />
       <About />
+      <Testimonials />
       <ContactUs />
     </>
   );
