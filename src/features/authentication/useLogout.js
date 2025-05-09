@@ -12,7 +12,7 @@ export function useLogout() {
       // untuk menghapus semua token dari cache
       queryClient.removeQueries();
 
-      navigate('/login', { replace: true });
+      navigate('/', { replace: true });
     },
   });
 
