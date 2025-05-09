@@ -76,7 +76,8 @@ const ImageContainer = styled.div`
   width: 300px;
   height: 22rem;
   box-shadow: var(--shadow-md);
-  transition: all 0.3s ease;
+  transition: transform 0.2s ease;
+  will-change: transform;
 
   &:hover {
     transform: translateY(-5px);
@@ -84,12 +85,15 @@ const ImageContainer = styled.div`
   }
 `;
 
-const ImageCard = styled.img`
+const ImageCard = styled.div`
   border-radius: var(--border-radius-lg);
   height: 100%;
   width: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
+  background-image: ${(props) => `url(${props.src})`};
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.2s ease;
+  will-change: transform;
 
   ${ImageContainer}:hover & {
     transform: scale(1.05);
@@ -103,11 +107,11 @@ const CabinName = styled.div`
   right: 0;
   padding: 1.5rem;
   background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-  color: var(--color-grey-0);
+  color: white;
   font-weight: 600;
   font-size: 1.6rem;
   opacity: 0.9;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.2s ease;
 
   ${ImageContainer}:hover & {
     opacity: 1;
@@ -145,16 +149,16 @@ const RightArrow = styled(ArrowButton)`
 `;
 
 function CabinsCarousel() {
-  const cabins = [
-    { id: 1, name: 'cabin-001', img: 'cabin-001.jpg' },
-    { id: 2, name: 'cabin-002', img: 'cabin-002.jpg' },
-    { id: 3, name: 'cabin-003', img: 'cabin-003.jpg' },
-    { id: 4, name: 'cabin-004', img: 'cabin-004.jpg' },
-    { id: 5, name: 'cabin-005', img: 'cabin-005.jpg' },
-    { id: 6, name: 'cabin-006', img: 'cabin-006.jpg' },
-  ];
-
   const scrollRef = useRef(null);
+
+  const cabins = [
+    { id: 1, name: 'Rustic Retreat', img: '/cabin-001.jpg' },
+    { id: 2, name: 'Forest Haven', img: '/cabin-002.jpg' },
+    { id: 3, name: 'Mountain View', img: '/cabin-003.jpg' },
+    { id: 4, name: 'Lakeside Cabin', img: '/cabin-004.jpg' },
+    { id: 5, name: 'Woodland Escape', img: '/cabin-005.jpg' },
+    { id: 6, name: 'Pine Valley Lodge', img: '/cabin-006.jpg' },
+  ];
 
   const scrollLeft = () => {
     if (scrollRef.current) {
@@ -176,7 +180,7 @@ function CabinsCarousel() {
         <Images ref={scrollRef}>
           {cabins.map((cabin) => (
             <ImageContainer key={cabin.id}>
-              <ImageCard src={cabin.img} alt={cabin.name} />
+              <ImageCard src={cabin.img} aria-label={cabin.name} />
               <CabinName>{cabin.name}</CabinName>
             </ImageContainer>
           ))}
