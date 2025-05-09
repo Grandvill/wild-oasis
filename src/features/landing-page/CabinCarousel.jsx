@@ -1,4 +1,4 @@
-// components/CabinsCarousel.jsx
+import { useRef } from 'react';
 import styled from 'styled-components';
 
 const CarouselSection = styled.section`
@@ -40,6 +40,12 @@ const CarouselTitle = styled.h3`
   }
 `;
 
+const CarouselWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+`;
+
 const Images = styled.div`
   display: flex;
   overflow-x: auto;
@@ -68,6 +74,7 @@ const ImageContainer = styled.div`
   overflow: hidden;
   flex: 0 0 auto;
   width: 300px;
+  height: 22rem;
   box-shadow: var(--shadow-md);
   transition: all 0.3s ease;
 
@@ -79,7 +86,7 @@ const ImageContainer = styled.div`
 
 const ImageCard = styled.img`
   border-radius: var(--border-radius-lg);
-  height: 22rem;
+  height: 100%;
   width: 100%;
   object-fit: cover;
   transition: transform 0.5s ease;
@@ -107,6 +114,36 @@ const CabinName = styled.div`
   }
 `;
 
+const ArrowButton = styled.button`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.8rem;
+  z-index: 10;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+`;
+
+const LeftArrow = styled(ArrowButton)`
+  left: 10px;
+`;
+
+const RightArrow = styled(ArrowButton)`
+  right: 10px;
+`;
+
 function CabinsCarousel() {
   const cabins = [
     { id: 1, name: 'cabin-001', img: 'cabin-001.jpg' },
@@ -117,17 +154,35 @@ function CabinsCarousel() {
     { id: 6, name: 'cabin-006', img: 'cabin-006.jpg' },
   ];
 
+  const scrollRef = useRef(null);
+
+  const scrollLeft = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+    }
+  };
+
   return (
     <CarouselSection id="cabins">
       <CarouselTitle>Cabin Kami</CarouselTitle>
-      <Images>
-        {cabins.map((cabin) => (
-          <ImageContainer key={cabin.id}>
-            <ImageCard src={cabin.img} alt={cabin.name} />
-            <CabinName>{cabin.name}</CabinName>
-          </ImageContainer>
-        ))}
-      </Images>
+      <CarouselWrapper>
+        <LeftArrow onClick={scrollLeft}>←</LeftArrow>
+        <Images ref={scrollRef}>
+          {cabins.map((cabin) => (
+            <ImageContainer key={cabin.id}>
+              <ImageCard src={cabin.img} alt={cabin.name} />
+              <CabinName>{cabin.name}</CabinName>
+            </ImageContainer>
+          ))}
+        </Images>
+        <RightArrow onClick={scrollRight}>→</RightArrow>
+      </CarouselWrapper>
     </CarouselSection>
   );
 }
