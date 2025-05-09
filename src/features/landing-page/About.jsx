@@ -79,6 +79,7 @@ const ImageWrapper = styled.div`
   overflow: hidden;
   box-shadow: var(--shadow-md);
   position: relative;
+  margin-top: 3rem;
 
   &::before {
     content: '';
