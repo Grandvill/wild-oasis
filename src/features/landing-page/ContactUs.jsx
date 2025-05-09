@@ -3,7 +3,7 @@ import Button from '../../ui/Button';
 
 const ContactSection = styled.section`
   padding: 6rem 2rem;
-  background-color: #fff;
+  background-color: var(--color-grey-100);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -17,7 +17,7 @@ const ContactSection = styled.section`
 
 const ContactTitle = styled.h3`
   font-size: clamp(2rem, 5vw, 3.2rem);
-  color: var(--color-brand-800);
+  color: var(--color-brand-600);
   text-align: center;
   margin-bottom: 3rem;
   position: relative;
@@ -45,12 +45,12 @@ const ContactContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  gap: 2rem;
+  gap: 5rem;
   flex-wrap: wrap;
 
   @media (max-width: 768px) {
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 2rem;
   }
 `;
 
@@ -70,10 +70,11 @@ const Input = styled.input`
   width: 100%;
   padding: 1rem;
   margin-bottom: 1rem;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--color-grey-300);
   border-radius: 8px;
   font-size: 1rem;
   box-sizing: border-box;
+  background-color: var(--color-grey-0);
 
   &:focus {
     outline: none;
@@ -85,12 +86,13 @@ const TextArea = styled.textarea`
   width: 100%;
   padding: 1rem;
   margin-bottom: 1rem;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--color-grey-300);
   border-radius: 8px;
   font-size: 1rem;
   height: 150px;
   resize: none;
   box-sizing: border-box;
+  background-color: var(--color-grey-0);
 
   &:focus {
     outline: none;
@@ -123,21 +125,11 @@ const Iframe = styled.iframe`
 
 const ContactInfo = styled.div`
   font-size: 1rem;
-  color: #666;
+  color: var(--color-grey-700);
   line-height: 1.6;
 
   p {
     margin: 0.5rem 0;
-  }
-
-  a {
-    color: #666;
-    text-decoration: none;
-    transition: color 0.3s ease;
-
-    &:hover {
-      color: #00c4b4;
-    }
   }
 `;
 
