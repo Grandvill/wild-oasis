@@ -211,7 +211,7 @@ function Testimonials() {
       text: 'Cabin kami di The Wild Oasis benar-benar mengagumkan! Pemandangan alam yang indah dan fasilitas yang lengkap membuat liburan kami menjadi sangat berkesan. Kami pasti akan kembali lagi.',
       name: 'Budi Santoso',
       title: 'Pengunjung Setia',
-      avatar: '/avatar-1.jpg',
+      avatar: '/default-user.jpg',
       rating: 5,
     },
     {
@@ -219,7 +219,7 @@ function Testimonials() {
       text: 'Pengalaman menginap di cabin yang tenang dan damai. Staff sangat ramah dan membantu. Kebersihan kabin terjaga dengan sangat baik dan pemandangan sekitar sungguh menakjubkan.',
       name: 'Siti Nuraini',
       title: 'Pecinta Alam',
-      avatar: '/avatar-2.jpg',
+      avatar: '/default-user.jpg',
       rating: 5,
     },
     {
@@ -227,7 +227,7 @@ function Testimonials() {
       text: 'Saya sangat merekomendasikan The Wild Oasis untuk retreat keluarga. Suasana alamnya memberikan energi positif dan cabin-nya sangat nyaman. Anak-anak sangat menikmati waktu bermain di sekitar cabin.',
       name: 'Ahmad Fauzi',
       title: 'Family Traveler',
-      avatar: '/avatar-3.jpg',
+      avatar: '/default-user.jpg',
       rating: 4,
     },
     {
@@ -235,7 +235,7 @@ function Testimonials() {
       text: 'Tempat yang sempurna untuk melarikan diri dari hiruk pikuk kota. Desain cabin yang modern namun tetap harmonis dengan alam membuat pengalaman menginap saya menjadi istimewa.',
       name: 'Dian Purnama',
       title: 'Urban Explorer',
-      avatar: '/avatar-4.jpg',
+      avatar: '/default-user.jpg',
       rating: 5,
     },
     {
@@ -243,7 +243,7 @@ function Testimonials() {
       text: 'Selama saya traveling ke berbagai tempat, The Wild Oasis adalah salah satu akomodasi terbaik yang pernah saya temui. Cabin dengan pemandangan yang luar biasa dan fasilitas yang lengkap.',
       name: 'Rini Sulistyowati',
       title: 'Travel Blogger',
-      avatar: '/avatar-5.jpg',
+      avatar: '/default-user.jpg',
       rating: 5,
     },
   ];
