@@ -1,10 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Logo from '../../ui/Logo';
-import Button from '../../ui/Button';
 
 const FooterSection = styled.footer`
   background-color: var(--color-grey-100);
@@ -156,59 +154,6 @@ const ContactIcon = styled.span`
   color: var(--color-brand-500);
 `;
 
-const SocialLinks = styled.div`
-  display: flex;
-  gap: 1.5rem;
-  margin-top: 1rem;
-
-  @media (max-width: 768px) {
-    justify-content: center;
-  }
-`;
-
-const SocialLink = styled.a`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 3.6rem;
-  height: 3.6rem;
-  border-radius: 50%;
-  background-color: var(--color-grey-200);
-  color: var(--color-grey-700);
-  font-size: 1.8rem;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background-color: var(--color-brand-500);
-    color: white;
-    transform: translateY(-3px);
-  }
-`;
-
-const NewsletterForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-top: 1rem;
-`;
-
-const NewsletterInput = styled.input`
-  padding: 1.2rem;
-  border: 1px solid var(--color-grey-300);
-  border-radius: var(--border-radius-sm);
-  font-size: 1.4rem;
-  background-color: var(--color-grey-0);
-
-  &:focus {
-    outline: none;
-    border-color: var(--color-brand-500);
-  }
-`;
-
-const SubscribeButton = styled(Button)`
-  margin-top: 0.5rem;
-`;
-
 const Copyright = styled.p`
   font-size: 1.4rem;
   color: var(--color-grey-500);
@@ -236,15 +181,7 @@ const LegalLinks = styled.div`
 `;
 
 function Footer() {
-  const [email, setEmail] = useState('');
   const currentYear = new Date().getFullYear();
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle newsletter signup
-    alert(`Thank you for subscribing with: ${email}`);
-    setEmail('');
-  };
 
   return (
     <FooterSection>
@@ -255,20 +192,6 @@ function Footer() {
               <Logo />
             </FooterLogo>
             <FooterDescription>Wild Oasis provides premium cabin experiences in the most beautiful natural settings. Escape the ordinary and reconnect with nature.</FooterDescription>
-            <SocialLinks>
-              <SocialLink href="#" aria-label="Facebook">
-                <i className="fa-brands fa-facebook-f"></i>
-              </SocialLink>
-              <SocialLink href="#" aria-label="Instagram">
-                <i className="fa-brands fa-instagram"></i>
-              </SocialLink>
-              <SocialLink href="#" aria-label="Twitter">
-                <i className="fa-brands fa-twitter"></i>
-              </SocialLink>
-              <SocialLink href="#" aria-label="Pinterest">
-                <i className="fa-brands fa-pinterest-p"></i>
-              </SocialLink>
-            </SocialLinks>
           </FooterColumn>
 
           <FooterColumn>
@@ -310,17 +233,6 @@ function Footer() {
               <ContactIcon>⏰</ContactIcon>
               <span>Mon-Fri: 9am - 5pm</span>
             </ContactItem>
-          </FooterColumn>
-
-          <FooterColumn>
-            <FooterHeading>Newsletter</FooterHeading>
-            <FooterDescription>Subscribe to our newsletter for special deals, new cabin alerts, and travel tips.</FooterDescription>
-            <NewsletterForm onSubmit={handleSubmit}>
-              <NewsletterInput type="email" placeholder="Your email address" value={email} onChange={(e) => setEmail(e.target.value)} required />
-              <SubscribeButton variation="primary" type="submit">
-                Subscribe
-              </SubscribeButton>
-            </NewsletterForm>
           </FooterColumn>
         </FooterTop>
 
