@@ -1,10 +1,28 @@
 // components/About.jsx
 import styled from 'styled-components';
+import { useRef, useEffect } from 'react';
+import { keyframes } from 'styled-components';
+
+// Keyframes for animations
+const fadeInUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 const AboutSection = styled.section`
   padding: 7rem 4rem;
   background-color: var(--color-grey-50);
   position: relative;
+
+  &.visible > div {
+    animation: ${fadeInUp} 1s ease-out forwards;
+  }
 
   &::before {
     content: '';
@@ -23,6 +41,7 @@ const AboutContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  opacity: 0;
 `;
 
 const AboutTitle = styled.h3`
@@ -102,9 +121,27 @@ const ImageWrapper = styled.div`
   }
 `;
 
+// About Component
 function About() {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          section.classList.add('visible');
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (section) observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <AboutSection id="about">
+    <AboutSection id="about" ref={sectionRef}>
       <AboutContainer>
         <AboutTitle>Tentang Wild Oasis</AboutTitle>
         <AboutContent>

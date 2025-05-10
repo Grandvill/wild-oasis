@@ -2,6 +2,19 @@
 
 import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+
+// Keyframes for animations
+const fadeInUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 const float = keyframes`
   0% { transform: translateY(0px); }
@@ -9,11 +22,7 @@ const float = keyframes`
   100% { transform: translateY(0px); }
 `;
 
-const fadeIn = keyframes`
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-`;
-
+// Styled components for Hero
 const HeroSection = styled.section`
   height: 100vh;
   display: flex;
@@ -25,6 +34,10 @@ const HeroSection = styled.section`
   text-align: center;
   position: relative;
   overflow: hidden;
+
+  &.visible > div {
+    animation: ${fadeInUp} 1s ease-out forwards;
+  }
 
   &::before {
     content: '';
@@ -42,8 +55,7 @@ const HeroSection = styled.section`
 const HeroContent = styled.div`
   max-width: 1200px;
   width: 100%;
-  animation: ${fadeIn} 1s ease-out;
-  z-index: 1;
+  opacity: 0;
 `;
 
 const Title = styled.h2`
@@ -201,7 +213,25 @@ const Shape = styled.div`
   filter: blur(40px);
 `;
 
+// Hero Component
 function Hero() {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          section.classList.add('visible');
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (section) observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
     if (element) {
@@ -210,7 +240,7 @@ function Hero() {
   };
 
   return (
-    <HeroSection>
+    <HeroSection ref={sectionRef}>
       <BackgroundShapes>
         <Shape style={{ width: '400px', height: '400px', top: '-100px', right: '-100px' }} />
         <Shape style={{ width: '300px', height: '300px', bottom: '10%', left: '5%' }} />
