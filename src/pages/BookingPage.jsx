@@ -6,7 +6,7 @@ import { format, addDays, differenceInDays } from 'date-fns';
 import Navbar from '../features/landing-page/Navbar';
 import Footer from '../features/landing-page/Footer';
 import AnimatedSection from '../features/landing-page/AnimatedSection';
-import { Calendar } from '../ui/Calendar';
+import DateRangePicker from '../features/landing-page/DataRangePicker';
 import Button from '../ui/Button';
 
 const PageContainer = styled.div`
@@ -80,72 +80,6 @@ const BookingGrid = styled.div`
   }
 `;
 
-const DatePickerContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-
-  @media (min-width: 768px) {
-    flex-direction: row;
-  }
-`;
-
-const DatePickerWrapper = styled.div`
-  flex: 1;
-
-  h3 {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
-    color: var(--color-grey-700);
-  }
-`;
-
-const CalendarWrapper = styled.div`
-  background-color: var(--color-grey-0);
-  border: 1px solid var(--color-grey-200);
-  border-radius: var(--border-radius-md);
-  overflow: hidden;
-
-  .react-calendar {
-    width: 100%;
-    border: none;
-    background-color: var(--color-grey-0);
-    color: var(--color-grey-700);
-
-    button {
-      color: var(--color-grey-700);
-
-      &:hover {
-        background-color: var(--color-grey-100);
-      }
-
-      &:disabled {
-        color: var(--color-grey-400);
-      }
-    }
-
-    .react-calendar__tile--active {
-      background-color: var(--color-brand-600);
-      color: white;
-
-      &:hover {
-        background-color: var(--color-brand-700);
-      }
-    }
-
-    .react-calendar__tile--rangeStart,
-    .react-calendar__tile--rangeEnd {
-      background-color: var(--color-brand-600);
-      color: white;
-    }
-
-    .react-calendar__tile--inRange {
-      background-color: var(--color-brand-100);
-      color: var(--color-brand-700);
-    }
-  }
-`;
-
 const CabinSelection = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -159,11 +93,32 @@ const CabinCard = styled.div`
   overflow: hidden;
   cursor: pointer;
   transition: all 0.3s ease;
+  position: relative;
 
   &:hover {
     transform: translateY(-5px);
     box-shadow: var(--shadow-md);
   }
+
+  ${(props) =>
+    props.selected &&
+    `
+    &::after {
+      content: "✓";
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 2.4rem;
+      height: 2.4rem;
+      background-color: var(--color-brand-600);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+  `}
 `;
 
 const CabinImage = styled.div`
@@ -229,6 +184,7 @@ const FormGroup = styled.div`
     &:focus {
       outline: none;
       border-color: var(--color-brand-600);
+      box-shadow: 0 0 0 2px rgba(var(--color-brand-600-rgb, 79, 70, 229), 0.1);
     }
   }
 `;
@@ -291,11 +247,58 @@ const BookingButton = styled(Button)`
   font-size: 1.6rem;
 `;
 
+const ProgressSteps = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4rem;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 1.5rem;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-grey-200);
+    z-index: 0;
+  }
+`;
+
+const Step = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+
+  .step-number {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background-color: ${(props) => (props.active ? 'var(--color-brand-600)' : 'var(--color-grey-200)')};
+    color: ${(props) => (props.active ? 'white' : 'var(--color-grey-600)')};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+    transition: all 0.3s ease;
+  }
+
+  .step-label {
+    font-size: 1.4rem;
+    color: ${(props) => (props.active ? 'var(--color-grey-800)' : 'var(--color-grey-500)')};
+    font-weight: ${(props) => (props.active ? '600' : 'normal')};
+  }
+`;
+
 function BookingPage() {
   const [checkInDate, setCheckInDate] = useState(new Date());
   const [checkOutDate, setCheckOutDate] = useState(addDays(new Date(), 3));
   const [selectedCabin, setSelectedCabin] = useState(1);
   const [guests, setGuests] = useState(2);
+  const [activeStep, setActiveStep] = useState(1);
 
   const cabins = [
     {
@@ -352,37 +355,31 @@ function BookingPage() {
       </BookingHero>
 
       <BookingContent>
+        <ProgressSteps>
+          <Step active={activeStep >= 1} onClick={() => setActiveStep(1)}>
+            <div className="step-number">1</div>
+            <div className="step-label">Dates</div>
+          </Step>
+          <Step active={activeStep >= 2} onClick={() => setActiveStep(2)}>
+            <div className="step-number">2</div>
+            <div className="step-label">Cabin</div>
+          </Step>
+          <Step active={activeStep >= 3} onClick={() => setActiveStep(3)}>
+            <div className="step-number">3</div>
+            <div className="step-label">Details</div>
+          </Step>
+          <Step active={activeStep >= 4}>
+            <div className="step-number">4</div>
+            <div className="step-label">Confirm</div>
+          </Step>
+        </ProgressSteps>
+
         <AnimatedSection animation="fadeInUp" duration={0.8}>
           <BookingGrid>
             <div>
               <BookingSection>
                 <h2>1. Select Your Dates</h2>
-                <DatePickerContainer>
-                  <DatePickerWrapper>
-                    <h3>Check-in Date</h3>
-                    <CalendarWrapper>
-                      <Calendar
-                        mode="single"
-                        selected={checkInDate}
-                        onSelect={(date) => {
-                          setCheckInDate(date);
-                          // Ensure checkout is after checkin
-                          if (date >= checkOutDate) {
-                            setCheckOutDate(addDays(date, 1));
-                          }
-                        }}
-                        minDate={new Date()}
-                      />
-                    </CalendarWrapper>
-                  </DatePickerWrapper>
-
-                  <DatePickerWrapper>
-                    <h3>Check-out Date</h3>
-                    <CalendarWrapper>
-                      <Calendar mode="single" selected={checkOutDate} onSelect={setCheckOutDate} minDate={addDays(checkInDate, 1)} />
-                    </CalendarWrapper>
-                  </DatePickerWrapper>
-                </DatePickerContainer>
+                <DateRangePicker startDate={checkInDate} endDate={checkOutDate} onStartDateChange={setCheckInDate} onEndDateChange={setCheckOutDate} minDate={new Date()} />
               </BookingSection>
 
               <AnimatedSection animation="fadeInUp" duration={0.8} delay={0.2}>
