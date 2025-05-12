@@ -252,10 +252,10 @@ function Hero() {
         <Subtitle>Booking cabin dengan nyaman, cepat, dan aman di Wild Oasis. Nikmati pengalaman menginap yang tak terlupakan di tengah keindahan alam.</Subtitle>
 
         <ButtonContainer>
-          <BookingButton to="/booking">
+          <BookingButton to="/booking-now">
             <span>Booking Sekarang</span>
           </BookingButton>
-          <ExploreButton to="#cabins">
+          <ExploreButton to="/explore-cabin">
             <span>Jelajahi Cabin</span>
           </ExploreButton>
         </ButtonContainer>
