@@ -11,7 +11,7 @@ export const PageContainer = styled.div`
 // Hero Section
 export const BookingHeroWrapper = styled.div`
   height: 40vh;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/cabin-booking-hero.png');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/booking-hero.jpg');
   background-size: cover;
   background-position: center;
   display: flex;
