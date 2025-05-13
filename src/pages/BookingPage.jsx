@@ -111,6 +111,12 @@ function BookingPage() {
     fetchCabins();
   }, []);
 
+  useEffect(() => {
+    if (selectedCabinId && activeStep < 2) {
+      setActiveStep(2);
+    }
+  }, [selectedCabinId, activeStep]);
+
   return (
     <PageContainer>
       <Navbar />
