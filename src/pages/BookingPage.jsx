@@ -11,6 +11,7 @@ import styled from 'styled-components';
 import BookingHero from '../features/bookingpage/BookingHero';
 import Navbar from '../features/landing-page/Navbar';
 import BookingProgress from '../features/bookingpage/BookingProgress';
+import { useCabins } from '../features/cabins/useCabins'; // Import custom hook
 
 const BookingGrid = styled.div`
   display: grid;
@@ -39,83 +40,59 @@ const BookingSummaryContainer = styled.div`
 `;
 
 function BookingPage() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [cabins, setCabins] = useState([]);
+  const { cabins, isLoading, error } = useCabins(); // Use custom hook
   const [selectedCabinId, setSelectedCabinId] = useState(null);
   const [activeStep, setActiveStep] = useState(1);
   const [checkInDate, setCheckInDate] = useState(new Date());
   const [checkOutDate, setCheckOutDate] = useState(new Date(Date.now() + 86400000)); // tomorrow
   const [guests, setGuests] = useState(1);
 
-  // Calculate selected cabin data
-  const selectedCabinData = cabins.find((cabin) => cabin.id === selectedCabinId) || null;
+  const [guestInfo, setGuestInfo] = useState({
+    fullName: '',
+    email: '',
+    nationality: '',
+    nationalID: '',
+    observations: '',
+  });
 
-  // Calculate booking details
+  const selectedCabinData = cabins?.find((cabin) => cabin.id === selectedCabinId) || null;
+
   const nights = checkInDate && checkOutDate ? differenceInDays(checkOutDate, checkInDate) : 0;
-  const subtotal = selectedCabinData ? nights * selectedCabinData.price : 0;
+  const subtotal = selectedCabinData ? nights * selectedCabinData.regularPrice : 0;
   const tax = subtotal * 0.1;
   const total = subtotal + tax;
-
-  useEffect(() => {
-    const fetchCabins = async () => {
-      setIsLoading(true);
-      try {
-        // Simulate API call
-        const data = [
-          {
-            id: 1,
-            name: 'Rustic Retreat',
-            price: 129,
-            image: '/cabins/rustic-retreat.jpg',
-            capacity: 4,
-            bedrooms: 2,
-            bathrooms: 1,
-          },
-          {
-            id: 2,
-            name: 'Forest Haven',
-            price: 159,
-            image: '/cabins/forest-haven.jpg',
-            capacity: 6,
-            bedrooms: 3,
-            bathrooms: 2,
-          },
-          {
-            id: 3,
-            name: 'Mountain View',
-            price: 189,
-            image: '/cabins/mountain-view.jpg',
-            capacity: 8,
-            bedrooms: 4,
-            bathrooms: 3,
-          },
-          {
-            id: 4,
-            name: 'Lakeside Cabin',
-            price: 139,
-            image: '/cabins/lakeside-cabin.jpg',
-            capacity: 4,
-            bedrooms: 2,
-            bathrooms: 1,
-          },
-        ];
-
-        setCabins(data);
-      } catch (error) {
-        console.error('Error fetching cabins:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchCabins();
-  }, []);
 
   useEffect(() => {
     if (selectedCabinId && activeStep < 2) {
       setActiveStep(2);
     }
   }, [selectedCabinId, activeStep]);
+
+  const handleBookingSubmit = () => {
+    const bookingData = {
+      created_at: new Date().toISOString(),
+      startDate: checkInDate.toISOString(),
+      endDate: checkOutDate.toISOString(),
+      cabinId: selectedCabinId,
+      guestId: null, // generate or fetch from DB if needed
+      hasBreakfast: true,
+      observations: guestInfo.observations,
+      isPaid: false,
+      numGuests: guests,
+    };
+
+    const guestData = {
+      fullName: guestInfo.fullName,
+      email: guestInfo.email,
+      nationality: guestInfo.nationality,
+      nationalID: guestInfo.nationalID,
+      countryFlag: `https://flagcdn.com/${guestInfo.nationality?.toLowerCase().slice(0, 2)}.svg`,
+    };
+
+    console.log('Booking:', bookingData);
+    console.log('Guest:', guestData);
+    // TODO: Submit to Supabase or backend here
+  };
 
   return (
     <PageContainer>
@@ -125,37 +102,32 @@ function BookingPage() {
         <BookingProgress activeStep={activeStep} setActiveStep={setActiveStep} />
         <BookingGrid>
           <BookingFormContainer>
-            {/* Date selection form */}
-            {isLoading ? (
-              <BookingSection>
-                <div>Loading cabins...</div>
-              </BookingSection>
+            <BookingForm
+              checkInDate={checkInDate}
+              checkOutDate={checkOutDate}
+              onCheckInDateChange={setCheckInDate}
+              onCheckOutDateChange={setCheckOutDate}
+              cabins={cabins || []}
+              selectedCabinId={selectedCabinId}
+              onCabinSelect={setSelectedCabinId}
+              guests={guests}
+              onGuestsChange={setGuests}
+              selectedCabinData={selectedCabinData}
+            />
+
+            {/* Pass only the necessary props to CabinSelection */}
+            <CabinSelection cabins={cabins} selectedCabinId={selectedCabinId} onSelectCabin={setSelectedCabinId} />
+
+            {selectedCabinData ? (
+              <GuestInformation guests={guests} maxGuests={selectedCabinData.maxCapacity} onGuestsChange={setGuests} guestInfo={guestInfo} onGuestInfoChange={setGuestInfo} />
             ) : (
-              <>
-                <BookingForm
-                  checkInDate={checkInDate}
-                  checkOutDate={checkOutDate}
-                  onCheckInDateChange={setCheckInDate}
-                  onCheckOutDateChange={setCheckOutDate}
-                  cabins={cabins}
-                  selectedCabinId={selectedCabinId}
-                  onCabinSelect={setSelectedCabinId}
-                  guests={guests}
-                  onGuestsChange={setGuests}
-                  selectedCabinData={selectedCabinData}
-                />
-                <CabinSelection cabins={Array.isArray(cabins) ? cabins : []} selectedCabinId={selectedCabinId} onSelectCabin={setSelectedCabinId} />
-                {selectedCabinData ? (
-                  <GuestInformation guests={guests} maxGuests={selectedCabinData.capacity} onGuestsChange={setGuests} />
-                ) : (
-                  <BookingSection>
-                    <h2>3. Guest Information</h2>
-                    <p>Please select a cabin first</p>
-                  </BookingSection>
-                )}
-              </>
+              <BookingSection>
+                <h2>3. Guest Information</h2>
+                <p>Please select a cabin first</p>
+              </BookingSection>
             )}
           </BookingFormContainer>
+
           <BookingSummaryContainer>
             <BookingSummary cabinData={selectedCabinData} checkInDate={checkInDate} checkOutDate={checkOutDate} nights={nights} guests={guests} subtotal={subtotal} tax={tax} total={total} />
           </BookingSummaryContainer>

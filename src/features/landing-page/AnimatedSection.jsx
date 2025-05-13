@@ -1,92 +1,62 @@
 'use client';
 
-import styled, { css, keyframes } from 'styled-components';
-import { useScrollAnimation } from './useScrollAnimation';
+import { useEffect, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-// Define animations
-const fadeInUp = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+const Section = styled.section`
+  opacity: ${(props) => (props.isVisible ? 1 : 0)};
+  transform: ${(props) => (props.isVisible ? 'translateY(0)' : props.animation === 'fadeInUp' ? 'translateY(20px)' : 'translateY(0)')};
+  transition: opacity ${(props) => props.duration || 0.6}s ease-out, transform ${(props) => props.duration || 0.6}s ease-out;
+  transition-delay: ${(props) => props.delay || 0}s;
 `;
 
-const fadeInLeft = keyframes`
-  from {
-    opacity: 0;
-    transform: translateX(-50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-`;
+function AnimatedSection({ children, animation, duration, delay }) {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef(null);
 
-const fadeInRight = keyframes`
-  from {
-    opacity: 0;
-    transform: translateX(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-`;
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      {
+        threshold: 0.1,
+      }
+    );
 
-const zoomIn = keyframes`
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-`;
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
 
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-`;
-
-// Animation variants
-const animations = {
-  fadeInUp,
-  fadeInLeft,
-  fadeInRight,
-  zoomIn,
-  fadeIn,
-};
-
-// Styled component for animated sections
-const StyledSection = styled.div`
-  opacity: 0;
-  will-change: transform, opacity;
-
-  ${({ isVisible, animation, duration, delay }) =>
-    isVisible &&
-    css`
-      animation: ${animations[animation]} ${duration}s ${delay}s ease forwards;
-    `}
-`;
-
-// AnimatedSection component
-function AnimatedSection({ children, animation = 'fadeInUp', duration = 0.8, delay = 0, threshold = 0.1, rootMargin = '0px', className, as = 'div', ...props }) {
-  const [ref, isVisible] = useScrollAnimation({ threshold, rootMargin });
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
 
   return (
-    <StyledSection ref={ref} isVisible={isVisible} animation={animation} duration={duration} delay={delay} className={className} as={as} {...props}>
+    <Section ref={sectionRef} isVisible={isVisible} animation={animation} duration={duration} delay={delay}>
       {children}
-    </StyledSection>
+    </Section>
   );
 }
+
+AnimatedSection.propTypes = {
+  children: PropTypes.node.isRequired,
+  animation: PropTypes.oneOf(['fadeIn', 'fadeInUp']),
+  duration: PropTypes.number,
+  delay: PropTypes.number,
+};
+
+AnimatedSection.defaultProps = {
+  animation: 'fadeIn',
+  duration: 0.6,
+  delay: 0,
+};
 
 export default AnimatedSection;

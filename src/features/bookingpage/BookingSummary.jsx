@@ -1,10 +1,35 @@
 import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 import AnimatedSection from '../landing-page/AnimatedSection';
+import Button from '../../ui/Button';
 import { BookingSummary as StyledBookingSummary, SummaryTitle, SummaryItem, TotalPrice, BookingButton } from './Styles';
 
-function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, subtotal, tax, total }) {
-  // Early return if cabinData is undefined
+function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, subtotal, tax, total, guestInfo, selectedCabinId }) {
+  const handleBookingSubmit = () => {
+    const bookingData = {
+      created_at: new Date().toISOString(),
+      startDate: checkInDate,
+      endDate: checkOutDate,
+      cabinId: selectedCabinId,
+      guestId: null, // or generate ID if needed
+      hasBreakfast: true, // optional
+      observations: guestInfo?.observations || '',
+      isPaid: false,
+      numGuests: guests,
+    };
+
+    const guestData = {
+      fullName: guestInfo?.fullName || '',
+      email: guestInfo?.email || '',
+      nationality: guestInfo?.nationality || '',
+      nationalID: guestInfo?.nationalID || '',
+      countryFlag: `https://flagcdn.com/${guestInfo?.nationality?.toLowerCase().slice(0, 2)}.svg`,
+    };
+
+    console.log('Booking:', bookingData);
+    console.log('Guest:', guestData);
+  };
+
   if (!cabinData) {
     return (
       <AnimatedSection animation="fadeInRight" duration={0.8} delay={0.2}>
@@ -71,6 +96,8 @@ function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, 
         <BookingButton variation="primary" size="large">
           Confirm Booking
         </BookingButton>
+
+        <Button onClick={handleBookingSubmit}>Submit Booking</Button>
       </StyledBookingSummary>
     </AnimatedSection>
   );
@@ -85,7 +112,7 @@ BookingSummary.propTypes = {
     capacity: PropTypes.number,
     bedrooms: PropTypes.number,
     bathrooms: PropTypes.number,
-  }), // Removed isRequired to allow null/undefined initially
+  }),
   checkInDate: PropTypes.instanceOf(Date).isRequired,
   checkOutDate: PropTypes.instanceOf(Date).isRequired,
   nights: PropTypes.number.isRequired,
@@ -93,6 +120,14 @@ BookingSummary.propTypes = {
   subtotal: PropTypes.number.isRequired,
   tax: PropTypes.number.isRequired,
   total: PropTypes.number.isRequired,
+  guestInfo: PropTypes.shape({
+    fullName: PropTypes.string,
+    email: PropTypes.string,
+    nationality: PropTypes.string,
+    nationalID: PropTypes.string,
+    observations: PropTypes.string,
+  }).isRequired,
+  selectedCabinId: PropTypes.number.isRequired,
 };
 
 export default BookingSummary;

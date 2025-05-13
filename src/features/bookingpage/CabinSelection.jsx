@@ -1,3 +1,5 @@
+'use client';
+
 import PropTypes from 'prop-types';
 import AnimatedSection from '../landing-page/AnimatedSection';
 import CabinCard from './CabinCard';
@@ -9,7 +11,6 @@ function CabinSelection({ cabins, selectedCabinId, onSelectCabin }) {
       <BookingSection>
         <h2>2. Choose Your Cabin</h2>
         <StyledCabinSelection>
-          {/* Check if cabins exists and is an array before mapping */}
           {Array.isArray(cabins) && cabins.length > 0 ? (
             cabins.map((cabin) => <CabinCard key={cabin.id} cabin={cabin} isSelected={selectedCabinId === cabin.id} onSelect={onSelectCabin} />)
           ) : (
@@ -22,24 +23,12 @@ function CabinSelection({ cabins, selectedCabinId, onSelectCabin }) {
 }
 
 CabinSelection.propTypes = {
-  cabins: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      price: PropTypes.number.isRequired,
-      image: PropTypes.string.isRequired,
-      capacity: PropTypes.number.isRequired,
-      bedrooms: PropTypes.number.isRequired,
-      bathrooms: PropTypes.number.isRequired,
-    })
-  ), // Removed isRequired to allow for undefined/null initially
-  selectedCabinId: PropTypes.number, // Also made this optional since it might not be set initially
+  cabins: PropTypes.arrayOf(PropTypes.object).isRequired,
+  selectedCabinId: PropTypes.number,
   onSelectCabin: PropTypes.func.isRequired,
 };
 
-// Set default props to ensure we always have valid values
 CabinSelection.defaultProps = {
-  cabins: [],
   selectedCabinId: null,
 };
 
