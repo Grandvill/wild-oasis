@@ -110,3 +110,32 @@ export async function deleteBooking(id) {
   }
   return data;
 }
+
+export async function createBookingWithGuest(guestData, bookingData) {
+  // Insert guest
+  const { data: guest, error: guestError } = await supabase.from('guests').insert([guestData]).select().single();
+
+  if (guestError) {
+    console.error(guestError);
+    throw new Error('Failed to create guest');
+  }
+
+  // Insert booking with guest ID
+  const { data: booking, error: bookingError } = await supabase
+    .from('bookings')
+    .insert([
+      {
+        ...bookingData,
+        guestId: guest.id,
+      },
+    ])
+    .select()
+    .single();
+
+  if (bookingError) {
+    console.error(bookingError);
+    throw new Error('Failed to create booking');
+  }
+
+  return booking;
+}

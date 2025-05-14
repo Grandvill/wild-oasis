@@ -45,13 +45,13 @@ BookingForm.propTypes = {
     capacity: PropTypes.number.isRequired,
     bedrooms: PropTypes.number.isRequired,
     bathrooms: PropTypes.number.isRequired,
-  }),
+  }).isRequired, // Make it required if you are passing a value.
 };
 
 BookingForm.defaultProps = {
   cabins: [],
   selectedCabinId: null,
-  selectedCabinData: null,
+  selectedCabinData: null, // Allow null as the default.
 };
 
 export default BookingForm;

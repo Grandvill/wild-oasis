@@ -1,33 +1,45 @@
 import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 import AnimatedSection from '../landing-page/AnimatedSection';
-import Button from '../../ui/Button';
+import { useCreateBooking } from './useCreateBooking';
 import { BookingSummary as StyledBookingSummary, SummaryTitle, SummaryItem, TotalPrice, BookingButton } from './Styles';
 
 function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, subtotal, tax, total, guestInfo, selectedCabinId }) {
+  const { createBooking, isLoading, isSuccess, error } = useCreateBooking();
+
   const handleBookingSubmit = () => {
+    console.log('RAW guestInfo:', guestInfo);
+    if (!guestInfo || !guestInfo.fullName) {
+      console.error('❌ guestInfo is empty or invalid');
+      return;
+    }
+
+    const guestData = {
+      fullName: guestInfo.fullName,
+      email: guestInfo.email,
+      nationality: guestInfo.nationality,
+      nationalID: guestInfo.nationalID,
+      countryFlag: `https://flagcdn.com/${guestInfo.nationality?.toLowerCase().slice(0, 2)}.svg`,
+    };
+
+    console.log('✅ guestData to send:', guestData);
+
     const bookingData = {
       created_at: new Date().toISOString(),
-      startDate: checkInDate,
-      endDate: checkOutDate,
+      startDate: checkInDate.toISOString(),
+      endDate: checkOutDate.toISOString(),
       cabinId: selectedCabinId,
-      guestId: null, // or generate ID if needed
-      hasBreakfast: true, // optional
+      hasBreakfast: true,
       observations: guestInfo?.observations || '',
       isPaid: false,
       numGuests: guests,
+      numNights: nights,
+      status: 'unconfirmed',
+      totalPrice: total,
+      extrasPrice: 0,
     };
 
-    const guestData = {
-      fullName: guestInfo?.fullName || '',
-      email: guestInfo?.email || '',
-      nationality: guestInfo?.nationality || '',
-      nationalID: guestInfo?.nationalID || '',
-      countryFlag: `https://flagcdn.com/${guestInfo?.nationality?.toLowerCase().slice(0, 2)}.svg`,
-    };
-
-    console.log('Booking:', bookingData);
-    console.log('Guest:', guestData);
+    createBooking({ guestData, bookingData });
   };
 
   if (!cabinData) {
@@ -93,11 +105,9 @@ function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, 
           <span className="value">${total.toFixed(2)}</span>
         </TotalPrice>
 
-        <BookingButton variation="primary" size="large">
+        <BookingButton variation="primary" size="large" onClick={handleBookingSubmit}>
           Confirm Booking
         </BookingButton>
-
-        <Button onClick={handleBookingSubmit}>Submit Booking</Button>
       </StyledBookingSummary>
     </AnimatedSection>
   );

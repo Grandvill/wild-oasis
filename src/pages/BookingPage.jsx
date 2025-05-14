@@ -112,7 +112,7 @@ function BookingPage() {
               onCabinSelect={setSelectedCabinId}
               guests={guests}
               onGuestsChange={setGuests}
-              selectedCabinData={selectedCabinData}
+              selectedCabinData={selectedCabinData || {}} // Safeguard to avoid passing null or undefined
             />
 
             {/* Pass only the necessary props to CabinSelection */}
@@ -129,7 +129,17 @@ function BookingPage() {
           </BookingFormContainer>
 
           <BookingSummaryContainer>
-            <BookingSummary cabinData={selectedCabinData} checkInDate={checkInDate} checkOutDate={checkOutDate} nights={nights} guests={guests} subtotal={subtotal} tax={tax} total={total} />
+            <BookingSummary
+              cabinData={{ ...selectedCabinData, price: selectedCabinData?.regularPrice }}
+              checkInDate={checkInDate}
+              checkOutDate={checkOutDate}
+              nights={nights}
+              guests={guests}
+              subtotal={subtotal}
+              tax={tax}
+              total={total}
+              guestInfo={guestInfo}
+            />
           </BookingSummaryContainer>
         </BookingGrid>
       </BookingContent>
