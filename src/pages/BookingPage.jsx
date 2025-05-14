@@ -40,7 +40,7 @@ const BookingSummaryContainer = styled.div`
 `;
 
 function BookingPage() {
-  const { cabins, isLoading, error } = useCabins(); // Use custom hook
+  const { cabins, isLoading, error } = useCabins();
   const [selectedCabinId, setSelectedCabinId] = useState(null);
   const [activeStep, setActiveStep] = useState(1);
   const [checkInDate, setCheckInDate] = useState(new Date());
@@ -61,6 +61,8 @@ function BookingPage() {
   const tax = subtotal * 0.1;
   const total = subtotal + tax;
 
+  console.log('Selected Cabin Data:', selectedCabinData); // Debug
+
   useEffect(() => {
     if (selectedCabinId && activeStep < 2) {
       setActiveStep(2);
@@ -73,7 +75,7 @@ function BookingPage() {
       startDate: checkInDate.toISOString(),
       endDate: checkOutDate.toISOString(),
       cabinId: selectedCabinId,
-      guestId: null, // generate or fetch from DB if needed
+      guestId: null,
       hasBreakfast: true,
       observations: guestInfo.observations,
       isPaid: false,
@@ -90,7 +92,6 @@ function BookingPage() {
 
     console.log('Booking:', bookingData);
     console.log('Guest:', guestData);
-    // TODO: Submit to Supabase or backend here
   };
 
   return (
@@ -111,10 +112,8 @@ function BookingPage() {
               onCabinSelect={setSelectedCabinId}
               guests={guests}
               onGuestsChange={setGuests}
-              selectedCabinData={selectedCabinData} // Pass only when valid, or remove if unused
             />
 
-            {/* Pass only the necessary props to CabinSelection */}
             <CabinSelection cabins={cabins} selectedCabinId={selectedCabinId} onSelectCabin={setSelectedCabinId} />
 
             {selectedCabinData ? (
@@ -138,7 +137,7 @@ function BookingPage() {
               tax={tax}
               total={total}
               guestInfo={guestInfo}
-              selectedCabinId={selectedCabinId} // Added
+              selectedCabinId={selectedCabinId}
             />
           </BookingSummaryContainer>
         </BookingGrid>

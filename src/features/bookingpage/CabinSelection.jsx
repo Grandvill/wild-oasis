@@ -1,5 +1,3 @@
-'use client';
-
 import PropTypes from 'prop-types';
 import AnimatedSection from '../landing-page/AnimatedSection';
 import CabinCard from './CabinCard';
@@ -23,7 +21,17 @@ function CabinSelection({ cabins, selectedCabinId, onSelectCabin }) {
 }
 
 CabinSelection.propTypes = {
-  cabins: PropTypes.arrayOf(PropTypes.object).isRequired,
+  cabins: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      regularPrice: PropTypes.number.isRequired, // Changed from price
+      image: PropTypes.string.isRequired,
+      maxCapacity: PropTypes.number.isRequired, // Changed from capacity
+      bedrooms: PropTypes.number.isRequired,
+      bathrooms: PropTypes.number.isRequired,
+    })
+  ).isRequired,
   selectedCabinId: PropTypes.number,
   onSelectCabin: PropTypes.func.isRequired,
 };

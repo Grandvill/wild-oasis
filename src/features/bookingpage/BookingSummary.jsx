@@ -35,10 +35,12 @@ function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, 
       numGuests: guests,
       numNights: nights,
       status: 'unconfirmed',
-      totalPrice: total,
+      cabinPrice: cabinData ? cabinData.price : 0, // Add cabinPrice from regularPrice
       extrasPrice: 0,
+      totalPrice: (cabinData ? cabinData.price * nights : 0) + (cabinData ? cabinData.price * nights * 0.1 : 0), // Recalculate total
     };
 
+    console.log('Booking data to send:', bookingData); // Debug
     createBooking({ guestData, bookingData });
   };
 
@@ -117,7 +119,7 @@ BookingSummary.propTypes = {
   cabinData: PropTypes.shape({
     id: PropTypes.number,
     name: PropTypes.string,
-    price: PropTypes.number, // Kept as price since BookingPage maps regularPrice to price
+    price: PropTypes.number,
     image: PropTypes.string,
     capacity: PropTypes.number,
   }),
@@ -129,7 +131,7 @@ BookingSummary.propTypes = {
   tax: PropTypes.number.isRequired,
   total: PropTypes.number.isRequired,
   guestInfo: PropTypes.object.isRequired,
-  selectedCabinId: PropTypes.number, // Added
+  selectedCabinId: PropTypes.number,
 };
 
 BookingSummary.defaultProps = {

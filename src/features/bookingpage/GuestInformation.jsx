@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import AnimatedSection from '../landing-page/AnimatedSection';
 import { BookingSection, GuestForm, FormGroup } from './Styles';
 
@@ -52,5 +53,13 @@ function GuestInformation({ guests, maxGuests, onGuestsChange, guestInfo, onGues
     </AnimatedSection>
   );
 }
+
+GuestInformation.propTypes = {
+  guests: PropTypes.number.isRequired,
+  maxGuests: PropTypes.number.isRequired, // Should be maxCapacity
+  onGuestsChange: PropTypes.func.isRequired,
+  guestInfo: PropTypes.object.isRequired,
+  onGuestInfoChange: PropTypes.func.isRequired,
+};
 
 export default GuestInformation;

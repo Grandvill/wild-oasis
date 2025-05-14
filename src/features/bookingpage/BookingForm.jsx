@@ -2,18 +2,7 @@ import PropTypes from 'prop-types';
 import DateRangePicker from './DataRangePicker';
 import { BookingSection } from './Styles';
 
-function BookingForm({
-  checkInDate,
-  checkOutDate,
-  onCheckInDateChange,
-  onCheckOutDateChange,
-  cabins,
-  selectedCabinId,
-  onCabinSelect,
-  guests,
-  onGuestsChange,
-  selectedCabinData, // Keep for compatibility but make optional
-}) {
+function BookingForm({ checkInDate, checkOutDate, onCheckInDateChange, onCheckOutDateChange, cabins, selectedCabinId, onCabinSelect, guests, onGuestsChange }) {
   return (
     <div>
       <BookingSection>
@@ -33,9 +22,9 @@ BookingForm.propTypes = {
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
-      price: PropTypes.number.isRequired, // Use regularPrice to match data
+      regularPrice: PropTypes.number.isRequired, // Changed from price
       image: PropTypes.string.isRequired,
-      capacity: PropTypes.number.isRequired,
+      maxCapacity: PropTypes.number.isRequired, // Changed from capacity
       bedrooms: PropTypes.number.isRequired,
       bathrooms: PropTypes.number.isRequired,
     })
@@ -44,21 +33,11 @@ BookingForm.propTypes = {
   onCabinSelect: PropTypes.func.isRequired,
   guests: PropTypes.number.isRequired,
   onGuestsChange: PropTypes.func.isRequired,
-  selectedCabinData: PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string,
-    price: PropTypes.number, // Use regularPrice to match data
-    image: PropTypes.string,
-    capacity: PropTypes.number,
-    bedrooms: PropTypes.number,
-    bathrooms: PropTypes.number,
-  }), // Optional, not required
 };
 
 BookingForm.defaultProps = {
   cabins: [],
   selectedCabinId: null,
-  // Remove selectedCabinData default to avoid conflicts
 };
 
 export default BookingForm;
