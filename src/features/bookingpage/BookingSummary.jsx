@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import AnimatedSection from '../landing-page/AnimatedSection';
 import { useCreateBooking } from './useCreateBooking';
 import { BookingSummary as StyledBookingSummary, SummaryTitle, SummaryItem, TotalPrice, BookingButton } from './Styles';
+import toast from 'react-hot-toast';
 
 function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, subtotal, tax, total, guestInfo, selectedCabinId }) {
   const { createBooking, isLoading, isSuccess, error } = useCreateBooking();
@@ -11,6 +12,12 @@ function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, 
     console.log('RAW guestInfo:', guestInfo);
     if (!guestInfo || !guestInfo.fullName) {
       console.error('❌ guestInfo is empty or invalid');
+      toast.error('Please fill in all required guest information.', {
+        style: {
+          background: '#EF4444',
+          color: '#fff',
+        },
+      });
       return;
     }
 
@@ -35,13 +42,34 @@ function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, 
       numGuests: guests,
       numNights: nights,
       status: 'unconfirmed',
-      cabinPrice: cabinData ? cabinData.price : 0, // Add cabinPrice from regularPrice
+      cabinPrice: cabinData ? cabinData.price : 0,
       extrasPrice: 0,
-      totalPrice: (cabinData ? cabinData.price * nights : 0) + (cabinData ? cabinData.price * nights * 0.1 : 0), // Recalculate total
+      totalPrice: (cabinData ? cabinData.price * nights : 0) + (cabinData ? cabinData.price * nights * 0.1 : 0),
     };
 
-    console.log('Booking data to send:', bookingData); // Debug
-    createBooking({ guestData, bookingData });
+    console.log('Booking data to send:', bookingData);
+
+    createBooking(
+      { guestData, bookingData },
+      {
+        onSuccess: () => {
+          toast.success('Booking confirmed successfully!', {
+            style: {
+              background: '#10B981',
+              color: '#fff',
+            },
+          });
+        },
+        onError: (err) => {
+          toast.error('Failed to confirm booking. Please try again.', {
+            style: {
+              background: '#EF4444',
+              color: '#fff',
+            },
+          });
+        },
+      }
+    );
   };
 
   if (!cabinData) {
@@ -107,7 +135,7 @@ function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, 
           <span className="value">${total.toFixed(2)}</span>
         </TotalPrice>
 
-        <BookingButton variation="primary" size="large" onClick={handleBookingSubmit}>
+        <BookingButton variation="primary" size="large" onClick={handleBookingSubmit} disabled={isLoading}>
           Confirm Booking
         </BookingButton>
       </StyledBookingSummary>

@@ -24,8 +24,7 @@ import { DarkModeProvider } from './context/DarkModeContext';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      // berfungsi untuk mengatur waktu pembaruan data (cache) setiap 60 detik
-      setTime: 60 * 1000,
+      staleTime: 60 * 1000,
     },
   },
 });
@@ -39,8 +38,6 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route index element={<LandingPage />} />
-
-            {/* Public routes for booking and exploring cabins */}
             <Route path="booking-now" element={<BookingPage />} />
             <Route path="explore-cabin/:cabinId" element={<ExploreCabin />} />
             <Route path="explore-cabin" element={<ExploreCabin />} />
@@ -67,24 +64,32 @@ function App() {
           </Routes>
         </BrowserRouter>
 
-        {/* libarary react hot toast untuk menampilkan notifikasi (npm i react-hot-toast) */}
         <Toaster
           position="top-center"
           gutter={12}
           containerStyle={{ margin: '8px' }}
-          toastOption={{
+          toastOptions={{
             success: {
-              duration: 3000,
+              duration: 4000,
+              style: {
+                fontSize: '16px',
+                maxWidth: '500px',
+                padding: '16px 24px',
+                backgroundColor: 'var(color-green-600)',
+                color: 'var(--color-grey-700)',
+                fontWeight: '500', // Added
+              },
             },
             error: {
-              suration: 5000,
-            },
-            style: {
-              fontSize: '16px',
-              maxWidth: '500px',
-              padding: '16px 24px',
-              backgroundColor: 'var(--color-grey-0)',
-              color: 'var(--color-grey-700)',
+              duration: 5000,
+              style: {
+                fontSize: '16px',
+                maxWidth: '500px',
+                padding: '16px 24px',
+                backgroundColor: 'var(color-red-600)',
+                color: 'var(--color-grey-700)',
+                fontWeight: '500', // Added
+              },
             },
           }}
         />
