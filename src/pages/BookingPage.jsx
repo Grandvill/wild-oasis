@@ -56,7 +56,6 @@ function BookingPage() {
   });
 
   const selectedCabinData = cabins?.find((cabin) => cabin.id === selectedCabinId) || null;
-
   const nights = checkInDate && checkOutDate ? differenceInDays(checkOutDate, checkInDate) : 0;
   const subtotal = selectedCabinData ? nights * selectedCabinData.regularPrice : 0;
   const tax = subtotal * 0.1;
@@ -112,7 +111,7 @@ function BookingPage() {
               onCabinSelect={setSelectedCabinId}
               guests={guests}
               onGuestsChange={setGuests}
-              selectedCabinData={selectedCabinData || {}} // Safeguard to avoid passing null or undefined
+              selectedCabinData={selectedCabinData} // Pass only when valid, or remove if unused
             />
 
             {/* Pass only the necessary props to CabinSelection */}
@@ -130,7 +129,7 @@ function BookingPage() {
 
           <BookingSummaryContainer>
             <BookingSummary
-              cabinData={{ ...selectedCabinData, price: selectedCabinData?.regularPrice }}
+              cabinData={selectedCabinData ? { ...selectedCabinData, price: selectedCabinData.regularPrice } : null}
               checkInDate={checkInDate}
               checkOutDate={checkOutDate}
               nights={nights}
@@ -139,6 +138,7 @@ function BookingPage() {
               tax={tax}
               total={total}
               guestInfo={guestInfo}
+              selectedCabinId={selectedCabinId} // Added
             />
           </BookingSummaryContainer>
         </BookingGrid>

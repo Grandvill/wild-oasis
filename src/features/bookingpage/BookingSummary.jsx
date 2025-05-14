@@ -115,13 +115,11 @@ function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, 
 
 BookingSummary.propTypes = {
   cabinData: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
+    id: PropTypes.number,
+    name: PropTypes.string,
+    price: PropTypes.number, // Kept as price since BookingPage maps regularPrice to price
     image: PropTypes.string,
     capacity: PropTypes.number,
-    bedrooms: PropTypes.number,
-    bathrooms: PropTypes.number,
   }),
   checkInDate: PropTypes.instanceOf(Date).isRequired,
   checkOutDate: PropTypes.instanceOf(Date).isRequired,
@@ -130,14 +128,13 @@ BookingSummary.propTypes = {
   subtotal: PropTypes.number.isRequired,
   tax: PropTypes.number.isRequired,
   total: PropTypes.number.isRequired,
-  guestInfo: PropTypes.shape({
-    fullName: PropTypes.string,
-    email: PropTypes.string,
-    nationality: PropTypes.string,
-    nationalID: PropTypes.string,
-    observations: PropTypes.string,
-  }).isRequired,
-  selectedCabinId: PropTypes.number.isRequired,
+  guestInfo: PropTypes.object.isRequired,
+  selectedCabinId: PropTypes.number, // Added
+};
+
+BookingSummary.defaultProps = {
+  cabinData: null,
+  selectedCabinId: null,
 };
 
 export default BookingSummary;
