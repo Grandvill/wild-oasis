@@ -1,3 +1,4 @@
+// DashboardLayout.jsx
 import styled from 'styled-components';
 import { useRecentBookings } from './useRecentBookings';
 import Spinner from '../../ui/Spinner';
@@ -17,10 +18,12 @@ const StyledDashboardLayout = styled.div`
 
 function DashboardLayout() {
   const { bookings, isLoadingBookings } = useRecentBookings();
-  const { confirmedStays, isLoading: isLoadingStays, numDays } = useRecentStays();
+  const { confirmedStays, isLoading: isLoadingStays, numDays, error } = useRecentStays();
   const { cabins, isLoading: isLoadingCabin } = useCabins();
 
   if (isLoadingBookings || isLoadingStays || isLoadingCabin) return <Spinner />;
+
+  if (error) return <div>Error loading data: {error.message}</div>;
 
   return (
     <StyledDashboardLayout>

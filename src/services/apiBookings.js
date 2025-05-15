@@ -50,21 +50,23 @@ export async function getBookingsAfterDate(date) {
 }
 
 export async function getStaysAfterDate(date) {
-  const { data, error } = await supabase.from('bookings').select('*, guests(fullName)').gte('startDate', date).lte('startDate', getToday());
+  const { data, error } = await supabase
+    .from('bookings')
+    .select('*, guests(fullName, nationality, countryFlag)')
+    .gte('startDate', date)
+    .lte('startDate', getToday({ end: true })); // Use end of day
 
   if (error) {
-    console.error(error);
+    console.error('Error fetching stays:', error);
     throw new Error('Bookings could not get loaded');
   }
 
-  return data;
+  return data || []; // Ensure an empty array if data is undefined
 }
 
 export async function getStaysTodayActivity() {
-  const todayStart = getToday(); // 2025-05-15T00:00:00.000Z
-  const todayEnd = getToday({ end: true }); // 2025-05-15T23:59:59.999Z
-
-  console.log('Today date range for query:', { todayStart, todayEnd }); // Debug
+  const todayStart = getToday();
+  const todayEnd = getToday({ end: true });
 
   const { data, error } = await supabase
     .from('bookings')
@@ -77,7 +79,6 @@ export async function getStaysTodayActivity() {
     throw new Error('Bookings could not get loaded');
   }
 
-  console.log('Fetched activities:', data); // Debug
   return data;
 }
 
