@@ -2,10 +2,11 @@ import PropTypes from 'prop-types';
 import AnimatedSection from '../landing-page/AnimatedSection';
 import { BookingSection, GuestForm, FormGroup } from './Styles';
 
-function GuestInformation({ guests, maxGuests, onGuestsChange, guestInfo, onGuestInfoChange }) {
+function GuestInformation({ guests, maxGuests, breakfastPrice, onGuestsChange, guestInfo, onGuestInfoChange }) {
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    onGuestInfoChange({ ...guestInfo, [name]: value });
+    const { name, value, type, checked } = e.target;
+    const newValue = type === 'checkbox' ? checked : value;
+    onGuestInfoChange({ ...guestInfo, [name]: newValue });
   };
 
   return (
@@ -15,22 +16,22 @@ function GuestInformation({ guests, maxGuests, onGuestsChange, guestInfo, onGues
         <GuestForm>
           <FormGroup>
             <label htmlFor="fullName">Full Name</label>
-            <input type="text" name="fullName" value={guestInfo.fullName} onChange={handleChange} placeholder="Enter your full name" />
+            <input type="text" name="fullName" value={guestInfo.fullName || ''} onChange={handleChange} placeholder="Enter your full name" />
           </FormGroup>
 
           <FormGroup>
             <label htmlFor="email">Email Address</label>
-            <input type="email" name="email" value={guestInfo.email} onChange={handleChange} placeholder="Enter your email" />
+            <input type="email" name="email" value={guestInfo.email || ''} onChange={handleChange} placeholder="Enter your email" />
           </FormGroup>
 
           <FormGroup>
             <label htmlFor="nationality">Nationality</label>
-            <input type="text" name="nationality" value={guestInfo.nationality} onChange={handleChange} placeholder="Enter your nationality" />
+            <input type="text" name="nationality" value={guestInfo.nationality || ''} onChange={handleChange} placeholder="Enter your nationality" />
           </FormGroup>
 
           <FormGroup>
             <label htmlFor="nationalID">National ID</label>
-            <input type="text" name="nationalID" value={guestInfo.nationalID} onChange={handleChange} placeholder="Enter your national ID" />
+            <input type="text" name="nationalID" value={guestInfo.nationalID || ''} onChange={handleChange} placeholder="Enter your national ID" />
           </FormGroup>
 
           <FormGroup>
@@ -45,8 +46,15 @@ function GuestInformation({ guests, maxGuests, onGuestsChange, guestInfo, onGues
           </FormGroup>
 
           <FormGroup>
+            <label htmlFor="hasBreakfast">
+              <input type="checkbox" name="hasBreakfast" id="hasBreakfast" checked={guestInfo.hasBreakfast || false} onChange={handleChange} />
+              Include Breakfast (${breakfastPrice} per guest per night)
+            </label>
+          </FormGroup>
+
+          <FormGroup>
             <label htmlFor="observations">Special Requests</label>
-            <input type="text" name="observations" value={guestInfo.observations} onChange={handleChange} placeholder="Any special requests or requirements?" />
+            <input type="text" name="observations" value={guestInfo.observations || ''} onChange={handleChange} placeholder="Any special requests or requirements?" />
           </FormGroup>
         </GuestForm>
       </BookingSection>
@@ -56,7 +64,8 @@ function GuestInformation({ guests, maxGuests, onGuestsChange, guestInfo, onGues
 
 GuestInformation.propTypes = {
   guests: PropTypes.number.isRequired,
-  maxGuests: PropTypes.number.isRequired, // Should be maxCapacity
+  maxGuests: PropTypes.number.isRequired,
+  breakfastPrice: PropTypes.number.isRequired,
   onGuestsChange: PropTypes.func.isRequired,
   guestInfo: PropTypes.object.isRequired,
   onGuestInfoChange: PropTypes.func.isRequired,

@@ -4,13 +4,22 @@ import AnimatedSection from '../landing-page/AnimatedSection';
 import { useCreateBooking } from './useCreateBooking';
 import { BookingSummary as StyledBookingSummary, SummaryTitle, SummaryItem, TotalPrice, BookingButton } from './Styles';
 import toast from 'react-hot-toast';
-import { getCountryCode } from '../../utils/helpers'; // Import the new helper
+import { getCountryCode } from '../../utils/helpers';
 
-function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, subtotal, tax, total, guestInfo, selectedCabinId }) {
+function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, subtotal, tax, total, guestInfo, selectedCabinId, settings, onBookingSubmit }) {
   const { createBooking, isLoading, isSuccess, error } = useCreateBooking();
 
+  // Validate booking length against settings
+  const { minBookingLength, maxBookingLength, breakfastPrice } = settings || {};
+  const isBookingLengthValid = nights >= minBookingLength && nights <= maxBookingLength;
+
+  // Calculate breakfast fee for display (already included in subtotal from parent)
+  const breakfastFee = guestInfo.hasBreakfast || false ? breakfastPrice * guests * nights : 0;
+
   const handleBookingSubmit = () => {
+    console.log('RAW guestInfo:', guestInfo);
     if (!guestInfo || !guestInfo.fullName) {
+      console.error('❌ guestInfo is empty or invalid');
       toast.error('Please fill in all required guest information.', {
         style: {
           background: '#EF4444',
@@ -20,9 +29,19 @@ function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, 
       return;
     }
 
-    // Get the country code from the nationality
+    if (!isBookingLengthValid) {
+      toast.error(`Booking length must be between ${minBookingLength} and ${maxBookingLength} nights.`, {
+        style: {
+          background: '#EF4444',
+          color: '#fff',
+        },
+      });
+      return;
+    }
+
     const countryCode = getCountryCode(guestInfo.nationality);
     if (countryCode === 'unknown') {
+      console.warn(`Country code not found for nationality: ${guestInfo.nationality}`);
       toast.error('Invalid nationality selected. Please choose a supported country.', {
         style: {
           background: '#EF4444',
@@ -45,15 +64,15 @@ function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, 
       startDate: checkInDate.toISOString(),
       endDate: checkOutDate.toISOString(),
       cabinId: selectedCabinId,
-      hasBreakfast: true,
+      hasBreakfast: guestInfo.hasBreakfast || false,
       observations: guestInfo?.observations || '',
       isPaid: false,
       numGuests: guests,
       numNights: nights,
+      cabinPrice: cabinData ? cabinData.price * nights : 0,
+      extrasPrice: breakfastFee,
+      totalPrice: total,
       status: 'unconfirmed',
-      cabinPrice: cabinData ? cabinData.price : 0,
-      extrasPrice: 0,
-      totalPrice: (cabinData ? cabinData.price * nights : 0) + (cabinData ? cabinData.price * nights * 0.1 : 0),
     };
 
     createBooking(
@@ -77,6 +96,9 @@ function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, 
         },
       }
     );
+
+    // Call the parent's submit handler (for logging or additional logic)
+    onBookingSubmit();
   };
 
   if (!cabinData) {
@@ -128,8 +150,20 @@ function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, 
         </SummaryItem>
 
         <SummaryItem>
-          <span className="label">Subtotal</span>
-          <span className="value">${subtotal}</span>
+          <span className="label">Subtotal (Cabin)</span>
+          <span className="value">${(cabinData.price * nights).toFixed(2)}</span>
+        </SummaryItem>
+
+        {guestInfo.hasBreakfast && (
+          <SummaryItem>
+            <span className="label">Breakfast Fee</span>
+            <span className="value">${breakfastFee.toFixed(2)}</span>
+          </SummaryItem>
+        )}
+
+        <SummaryItem>
+          <span className="label">Subtotal (with Extras)</span>
+          <span className="value">${subtotal.toFixed(2)}</span>
         </SummaryItem>
 
         <SummaryItem>
@@ -142,7 +176,7 @@ function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, 
           <span className="value">${total.toFixed(2)}</span>
         </TotalPrice>
 
-        <BookingButton variation="primary" size="large" onClick={handleBookingSubmit} disabled={isLoading}>
+        <BookingButton variation="primary" size="large" onClick={handleBookingSubmit} disabled={isLoading || !isBookingLengthValid}>
           Confirm Booking
         </BookingButton>
       </StyledBookingSummary>
@@ -167,6 +201,13 @@ BookingSummary.propTypes = {
   total: PropTypes.number.isRequired,
   guestInfo: PropTypes.object.isRequired,
   selectedCabinId: PropTypes.number,
+  settings: PropTypes.shape({
+    minBookingLength: PropTypes.number,
+    maxBookingLength: PropTypes.number,
+    maxGuestsPerBooking: PropTypes.number,
+    breakfastPrice: PropTypes.number,
+  }).isRequired,
+  onBookingSubmit: PropTypes.func.isRequired,
 };
 
 BookingSummary.defaultProps = {

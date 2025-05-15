@@ -112,7 +112,7 @@ export async function createBookingWithGuest(guestData, bookingData) {
 
   const { data: booking, error: bookingError } = await supabase
     .from('bookings')
-    .insert([{ ...bookingData, guestId: guest.id }])
+    .insert([{ ...bookingData, guestId: guest.id, status: bookingData.status || 'unconfirmed' }])
     .select()
     .single();
 
