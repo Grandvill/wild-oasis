@@ -76,7 +76,7 @@ function App() {
                 maxWidth: '500px',
                 padding: '16px 24px',
                 backgroundColor: 'var(color-green-600)',
-                color: 'var(--color-grey-700)',
+                color: 'var(--color-grey-400)',
                 fontWeight: '500', // Added
               },
             },
@@ -87,7 +87,7 @@ function App() {
                 maxWidth: '500px',
                 padding: '16px 24px',
                 backgroundColor: 'var(color-red-600)',
-                color: 'var(--color-grey-700)',
+                color: 'var(--color-grey-400)',
                 fontWeight: '500', // Added
               },
             },
