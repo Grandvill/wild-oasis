@@ -4,15 +4,26 @@ import AnimatedSection from '../landing-page/AnimatedSection';
 import { useCreateBooking } from './useCreateBooking';
 import { BookingSummary as StyledBookingSummary, SummaryTitle, SummaryItem, TotalPrice, BookingButton } from './Styles';
 import toast from 'react-hot-toast';
+import { getCountryCode } from '../../utils/helpers'; // Import the new helper
 
 function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, subtotal, tax, total, guestInfo, selectedCabinId }) {
   const { createBooking, isLoading, isSuccess, error } = useCreateBooking();
 
   const handleBookingSubmit = () => {
-    console.log('RAW guestInfo:', guestInfo);
     if (!guestInfo || !guestInfo.fullName) {
-      console.error('❌ guestInfo is empty or invalid');
       toast.error('Please fill in all required guest information.', {
+        style: {
+          background: '#EF4444',
+          color: '#fff',
+        },
+      });
+      return;
+    }
+
+    // Get the country code from the nationality
+    const countryCode = getCountryCode(guestInfo.nationality);
+    if (countryCode === 'unknown') {
+      toast.error('Invalid nationality selected. Please choose a supported country.', {
         style: {
           background: '#EF4444',
           color: '#fff',
@@ -26,10 +37,8 @@ function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, 
       email: guestInfo.email,
       nationality: guestInfo.nationality,
       nationalID: guestInfo.nationalID,
-      countryFlag: `https://flagcdn.com/${guestInfo.nationality?.toLowerCase().slice(0, 2)}.svg`,
+      countryFlag: `https://flagcdn.com/${countryCode}.svg`,
     };
-
-    console.log('✅ guestData to send:', guestData);
 
     const bookingData = {
       created_at: new Date().toISOString(),
@@ -46,8 +55,6 @@ function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, 
       extrasPrice: 0,
       totalPrice: (cabinData ? cabinData.price * nights : 0) + (cabinData ? cabinData.price * nights * 0.1 : 0),
     };
-
-    console.log('Booking data to send:', bookingData);
 
     createBooking(
       { guestData, bookingData },

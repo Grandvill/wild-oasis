@@ -1,4 +1,8 @@
 import { formatDistance, parseISO, differenceInDays } from 'date-fns';
+import countries from 'i18n-iso-countries'; // Import the library
+import en from 'i18n-iso-countries/langs/en.json'; // Import English locale
+
+countries.registerLocale(en);
 
 // We want to make this function work for both Date objects and strings (which come from Supabase)
 export const subtractDates = (dateStr1, dateStr2) => differenceInDays(parseISO(String(dateStr1)), parseISO(String(dateStr2)));
@@ -31,3 +35,22 @@ export const getToday = function (options = {}) {
 };
 
 export const formatCurrency = (value) => new Intl.NumberFormat('en', { style: 'currency', currency: 'USD' }).format(value);
+
+// Dynamically map country names to ISO 3166-1 alpha-2 codes
+export const getCountryCode = (countryName) => {
+  if (!countryName) return 'unknown';
+
+  const normalizedCountry = countryName.toLowerCase().trim();
+  // Handle special cases or variations in country names
+  const specialCases = {
+    'united states': 'United States',
+    'united kingdom': 'United Kingdom',
+    'south korea': 'South Korea',
+    'north korea': 'North Korea',
+    // Add more special cases if needed
+  };
+
+  const countryToUse = specialCases[normalizedCountry] || countryName;
+  const code = countries.getAlpha2Code(countryToUse, 'en');
+  return code ? code.toLowerCase() : 'unknown';
+};
