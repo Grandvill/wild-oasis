@@ -5,6 +5,7 @@ import { useCreateBooking } from './useCreateBooking';
 import { BookingSummary as StyledBookingSummary, SummaryTitle, SummaryItem, TotalPrice, BookingButton } from './Styles';
 import toast from 'react-hot-toast';
 import { getCountryCode } from '../../utils/helpers';
+import SpinnerMini from '../../ui/SpinnerMini';
 
 function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, subtotal, tax, total, guestInfo, selectedCabinId, settings, onBookingSubmit }) {
   const { createBooking, isLoading, isSuccess, error } = useCreateBooking();
@@ -177,7 +178,7 @@ function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, 
         </TotalPrice>
 
         <BookingButton variation="primary" size="large" onClick={handleBookingSubmit} disabled={isLoading || !isBookingLengthValid}>
-          Confirm Booking
+          {!isLoading ? 'Confirm Booking' : <SpinnerMini />}
         </BookingButton>
       </StyledBookingSummary>
     </AnimatedSection>
