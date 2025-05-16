@@ -18,7 +18,7 @@ import Checkin from './pages/Checkin';
 import ProtectedRoute from './ui/ProtectedRoute';
 import LandingPage from './pages/LandingPage';
 import BookingPage from './pages/BookingPage';
-import ExploreCabin from './pages/ExploreCabin';
+import ExploreCabins from './pages/ExploreCabins';
 import { DarkModeProvider } from './context/DarkModeContext';
 
 const queryClient = new QueryClient({
@@ -39,8 +39,8 @@ function App() {
           <Routes>
             <Route index element={<LandingPage />} />
             <Route path="booking-now" element={<BookingPage />} />
-            <Route path="explore-cabin/:cabinId" element={<ExploreCabin />} />
-            <Route path="explore-cabin" element={<ExploreCabin />} />
+            <Route path="explore-cabin/:cabinId" element={<ExploreCabins />} />
+            <Route path="explore-cabin" element={<ExploreCabins />} />
 
             <Route
               element={

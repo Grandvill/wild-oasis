@@ -1,3 +1,5 @@
+'use client';
+
 import styled from 'styled-components';
 import Heading from './Heading';
 import GlobalStyles from '../styles/GlobalStyles';
@@ -33,17 +35,23 @@ const Box = styled.div`
   }
 `;
 
-function ErrorFallback({ error, resetErrorBoundary }) {
+// Modified to accept either an error object or a message string
+function ErrorFallback({ error, message, resetErrorBoundary }) {
+  // Determine the message to display
+  const displayMessage = message || error?.message || 'An unknown error occurred';
+
   return (
     <>
       <GlobalStyles />
       <StyledErrorFallback>
         <Box>
           <Heading as="h1">Something went wrong😓</Heading>
-          <p>{error.message}</p>
-          <Button size="large" onClick={resetErrorBoundary}>
-            Try again
-          </Button>
+          <p>{displayMessage}</p>
+          {resetErrorBoundary && (
+            <Button size="large" onClick={resetErrorBoundary}>
+              Try again
+            </Button>
+          )}
         </Box>
       </StyledErrorFallback>
     </>
