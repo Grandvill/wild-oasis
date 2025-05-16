@@ -65,6 +65,22 @@ function BookingPage() {
     }
   }, [selectedCabinId, activeStep]);
 
+  const resetForm = () => {
+    setSelectedCabinId(null);
+    setGuestInfo({
+      fullName: '',
+      email: '',
+      nationality: '',
+      nationalID: '',
+      observations: '',
+      hasBreakfast: false,
+    });
+    setGuests(1);
+    setActiveStep(1);
+    setCheckInDate(new Date());
+    setCheckOutDate(new Date(Date.now() + 86400000));
+  };
+
   // Define variables that depend on settings and cabins
   const { minBookingLength, maxBookingLength, maxGuestsPerBooking, breakfastPrice } = settings || {};
   const selectedCabinData = cabins?.find((cabin) => cabin.id === selectedCabinId) || null;
@@ -129,9 +145,6 @@ function BookingPage() {
       nationalID: guestInfo.nationalID,
       countryFlag: `https://flagcdn.com/${guestInfo.nationality?.toLowerCase().slice(0, 2)}.svg`,
     };
-
-    console.log('Booking:', bookingData);
-    console.log('Guest:', guestData);
   };
 
   return (
@@ -192,6 +205,7 @@ function BookingPage() {
                   selectedCabinId={selectedCabinId}
                   settings={settings}
                   onBookingSubmit={handleBookingSubmit}
+                  onResetForm={resetForm}
                 />
               </BookingSummaryContainer>
             </BookingGrid>

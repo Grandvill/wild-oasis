@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 import { getCountryCode } from '../../utils/helpers';
 import SpinnerMini from '../../ui/SpinnerMini';
 
-function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, subtotal, tax, total, guestInfo, selectedCabinId, settings, onBookingSubmit }) {
+function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, subtotal, tax, total, guestInfo, selectedCabinId, settings, onBookingSubmit, onResetForm }) {
   const { createBooking, isLoading, isSuccess, error } = useCreateBooking();
 
   // Validate booking length against settings
@@ -18,9 +18,7 @@ function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, 
   const breakfastFee = guestInfo.hasBreakfast || false ? breakfastPrice * guests * nights : 0;
 
   const handleBookingSubmit = () => {
-    console.log('RAW guestInfo:', guestInfo);
     if (!guestInfo || !guestInfo.fullName) {
-      console.error('❌ guestInfo is empty or invalid');
       toast.error('Please fill in all required guest information.', {
         style: {
           background: '#EF4444',
@@ -42,7 +40,6 @@ function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, 
 
     const countryCode = getCountryCode(guestInfo.nationality);
     if (countryCode === 'unknown') {
-      console.warn(`Country code not found for nationality: ${guestInfo.nationality}`);
       toast.error('Invalid nationality selected. Please choose a supported country.', {
         style: {
           background: '#EF4444',
@@ -86,6 +83,7 @@ function BookingSummary({ cabinData, checkInDate, checkOutDate, nights, guests, 
               color: '#fff',
             },
           });
+          onResetForm();
         },
         onError: (err) => {
           toast.error('Failed to confirm booking. Please try again.', {
@@ -209,6 +207,7 @@ BookingSummary.propTypes = {
     breakfastPrice: PropTypes.number,
   }).isRequired,
   onBookingSubmit: PropTypes.func.isRequired,
+  onResetForm: PropTypes.func.isRequired,
 };
 
 BookingSummary.defaultProps = {
