@@ -186,6 +186,50 @@ export const FormGroup = styled.div`
   }
 `;
 
+export const StyledCheckbox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  input[type='checkbox'] {
+    width: 2rem;
+    height: 2rem;
+    margin: 0;
+    cursor: pointer;
+    appearance: none; /* Remove default checkbox styling */
+    border: 2px solid var(--color-grey-300);
+    border-radius: var(--border-radius-sm);
+    background-color: var(--color-grey-0);
+    transition: all 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: var(--color-brand-600);
+      box-shadow: 0 0 0 2px rgba(var(--color-brand-600-rgb, 79, 70, 229), 0.1);
+    }
+
+    &:checked {
+      border-color: var(--color-brand-600);
+      background-color: var(--color-brand-600);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+      background-size: 1.2rem;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    &:hover:not(:checked) {
+      border-color: var(--color-grey-500);
+    }
+  }
+
+  label {
+    font-size: 1.6rem;
+    color: var(--color-grey-700);
+    user-select: none;
+    cursor: pointer;
+  }
+`;
+
 // Booking Summary
 export const BookingSummary = styled.div`
   background-color: var(--color-grey-0);

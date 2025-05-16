@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import AnimatedSection from '../landing-page/AnimatedSection';
-import { BookingSection, GuestForm, FormGroup } from './Styles';
+import { BookingSection, GuestForm, FormGroup, StyledCheckbox } from './Styles';
 
 function GuestInformation({ guests, maxGuests, breakfastPrice, onGuestsChange, guestInfo, onGuestInfoChange }) {
   const handleChange = (e) => {
@@ -46,10 +46,10 @@ function GuestInformation({ guests, maxGuests, breakfastPrice, onGuestsChange, g
           </FormGroup>
 
           <FormGroup>
-            <label htmlFor="hasBreakfast">
+            <StyledCheckbox>
               <input type="checkbox" name="hasBreakfast" id="hasBreakfast" checked={guestInfo.hasBreakfast || false} onChange={handleChange} />
-              Include Breakfast (${breakfastPrice} per guest per night)
-            </label>
+              <label htmlFor="hasBreakfast">Include Breakfast (${breakfastPrice} per guest per night)</label>
+            </StyledCheckbox>
           </FormGroup>
 
           <FormGroup>
