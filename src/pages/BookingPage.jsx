@@ -59,11 +59,26 @@ function BookingPage() {
     hasBreakfast: false,
   });
 
+  // Move to step 2 when a cabin is selected
   useEffect(() => {
     if (selectedCabinId && activeStep < 2) {
       setActiveStep(2);
     }
   }, [selectedCabinId, activeStep]);
+
+  // Move to step 3 when all required guest info fields are filled
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const requiredFields = ['fullName', 'email', 'nationality', 'nationalID'];
+      const allFieldsFilled = requiredFields.every((field) => guestInfo[field]?.trim() !== '');
+
+      if (allFieldsFilled && activeStep === 2) {
+        setActiveStep(3);
+      }
+    }, 300); // Debounce for 300ms
+
+    return () => clearTimeout(timer);
+  }, [guestInfo, activeStep]);
 
   const resetForm = () => {
     setSelectedCabinId(null);
