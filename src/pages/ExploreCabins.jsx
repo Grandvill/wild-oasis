@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Navbar from '../features/landing-page/Navbar';
 import Footer from '../features/landing-page/Footer';
@@ -12,6 +12,9 @@ import CabinGallerySection from '../features/explore-cabins/CabinGallerySection'
 import CabinBookingCard from '../features/explore-cabins/CabinBookingCard';
 import Spinner from '../ui/Spinner';
 import ErrorFallback from '../ui/ErrorFallback';
+import Pagination from '../ui/Pagination';
+import CabinList from '../features/explore-cabins/CabinList';
+import { PAGE_SIZE } from '../utils/constants';
 
 const PageContainer = styled.div`
   min-height: 100vh;
@@ -62,10 +65,34 @@ const LoadingContainer = styled.div`
   min-height: 50vh;
 `;
 
+const SectionTitle = styled.h2`
+  font-size: 2.8rem;
+  font-weight: 600;
+  color: var(--color-grey-800);
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-grey-200);
+`;
+
+const PaginationContainer = styled.div`
+  margin-top: 4rem;
+`;
+
 function ExploreCabins() {
   const { cabinId } = useParams();
+  const [searchParams] = useSearchParams();
   const { cabins, isLoading, error } = useCabins();
   const [selectedCabin, setSelectedCabin] = useState(null);
+
+  // Get current page from URL search params
+  const currentPage = !searchParams.get('page') ? 1 : Number(searchParams.get('page'));
+
+  // Get current page cabins
+  const getCurrentPageCabins = () => {
+    if (!cabins) return [];
+    const startIndex = (currentPage - 1) * PAGE_SIZE;
+    return cabins.slice(startIndex, startIndex + PAGE_SIZE);
+  };
 
   useEffect(() => {
     if (cabins && cabins.length > 0) {
@@ -83,6 +110,11 @@ function ExploreCabins() {
     }
   }, [cabins, cabinId]);
 
+  // Scroll to top when changing pages
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentPage]);
+
   if (isLoading) {
     return (
       <PageContainer>
@@ -99,14 +131,13 @@ function ExploreCabins() {
       <PageContainer>
         <Navbar />
         <ContentContainer>
-          {/* Pass the error object directly instead of trying to access error.message */}
           <ErrorFallback message={`Error loading cabins: ${error.message || 'Unknown error'}`} />
         </ContentContainer>
       </PageContainer>
     );
   }
 
-  if (!selectedCabin) {
+  if (!cabins || cabins.length === 0) {
     return (
       <PageContainer>
         <Navbar />
@@ -120,20 +151,45 @@ function ExploreCabins() {
   return (
     <PageContainer>
       <Navbar />
-      <CabinHeroSection cabin={selectedCabin} />
+
+      {/* Show hero section only if a specific cabin is selected */}
+      {selectedCabin && <CabinHeroSection cabin={selectedCabin} />}
 
       <ContentContainer>
-        <ContentGrid>
-          <MainContent>
-            <CabinAboutSection cabin={selectedCabin} />
-            <CabinGallerySection cabin={selectedCabin} />
-            {/* Additional sections like amenities, location, reviews can be added as separate components */}
-          </MainContent>
+        {selectedCabin && cabinId ? (
+          // Detailed view of a single cabin
+          <>
+            <ContentGrid>
+              <MainContent>
+                <CabinAboutSection cabin={selectedCabin} />
+                <CabinGallerySection cabin={selectedCabin} />
+                {/* Additional sections like amenities, location, reviews can be added as separate components */}
+              </MainContent>
 
-          <SideContent>
-            <CabinBookingCard cabin={selectedCabin} />
-          </SideContent>
-        </ContentGrid>
+              <SideContent>
+                <CabinBookingCard cabin={selectedCabin} />
+              </SideContent>
+            </ContentGrid>
+
+            {/* Other cabins section with pagination */}
+            <div style={{ marginTop: '6rem' }}>
+              <SectionTitle>Explore More Cabins</SectionTitle>
+              <CabinList cabins={getCurrentPageCabins()} currentCabinId={selectedCabin.id} />
+              <PaginationContainer>
+                <Pagination count={cabins.length} />
+              </PaginationContainer>
+            </div>
+          </>
+        ) : (
+          // List view of all cabins with pagination
+          <>
+            <SectionTitle>Explore Our Cabins</SectionTitle>
+            <CabinList cabins={getCurrentPageCabins()} />
+            <PaginationContainer>
+              <Pagination count={cabins.length} />
+            </PaginationContainer>
+          </>
+        )}
       </ContentContainer>
 
       <Footer />
