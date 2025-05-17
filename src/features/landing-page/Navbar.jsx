@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Logo from '../../ui/Logo';
 import DarkModeToggle from '../../ui/DarkModeToggle';
 
@@ -178,6 +178,8 @@ const Overlay = styled.div`
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -191,6 +193,29 @@ function Navbar() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (location.hash) {
+      const sectionId = location.hash.replace('#', '');
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [location]);
+
+  const handleSectionClick = (hash) => {
+    navigate('/' + hash);
+    setMobileMenuOpen(false);
+  };
+
+  const handleHomeClick = () => {
+    navigate('/');
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 0);
+    setMobileMenuOpen(false);
+  };
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -210,22 +235,34 @@ function Navbar() {
         <LeftSection>
           <NavLinks>
             <li>
-              <Link to="/">Home</Link>
+              <Link to="/" onClick={handleHomeClick}>
+                Home
+              </Link>
             </li>
             <li>
-              <Link to="/explore-cabin">Cabin</Link>
+              <Link to="/explore-cabin" onClick={closeMobileMenu}>
+                Cabin
+              </Link>
             </li>
             <li>
-              <Link to="/booking-now">Booking</Link>
+              <Link to="/booking-now" onClick={closeMobileMenu}>
+                Booking
+              </Link>
             </li>
             <li>
-              <a href="#about">About</a>
+              <Link to="/#about" onClick={() => handleSectionClick('#about')}>
+                About
+              </Link>
             </li>
             <li>
-              <a href="#testimonials">Testimonials</a>
+              <Link to="/#testimonials" onClick={() => handleSectionClick('#testimonials')}>
+                Testimonials
+              </Link>
             </li>
             <li>
-              <a href="#contact-us">Contact Us</a>
+              <Link to="/#contact-us" onClick={() => handleSectionClick('#contact-us')}>
+                Contact Us
+              </Link>
             </li>
           </NavLinks>
         </LeftSection>
@@ -250,7 +287,7 @@ function Navbar() {
         </LogoWrapper>
         <MobileNavLinks>
           <li>
-            <Link to="/" onClick={closeMobileMenu}>
+            <Link to="/" onClick={handleHomeClick}>
               Home
             </Link>
           </li>
@@ -265,19 +302,19 @@ function Navbar() {
             </Link>
           </li>
           <li>
-            <a href="#about" onClick={closeMobileMenu}>
+            <Link to="/#about" onClick={() => handleSectionClick('#about')}>
               About
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#testimonials" onClick={closeMobileMenu}>
+            <Link to="/#testimonials" onClick={() => handleSectionClick('#testimonials')}>
               Testimonials
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#contact-us" onClick={closeMobileMenu}>
+            <Link to="/#contact-us" onClick={() => handleSectionClick('#contact-us')}>
               Contact Us
-            </a>
+            </Link>
           </li>
           <li>
             <Link to="/login" onClick={closeMobileMenu}>
