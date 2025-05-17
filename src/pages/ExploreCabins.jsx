@@ -15,6 +15,7 @@ import ErrorFallback from '../ui/ErrorFallback';
 import Pagination from '../ui/Pagination';
 import CabinList from '../features/explore-cabins/CabinList';
 import { PAGE_SIZE } from '../utils/constants';
+import { useSettings } from '../features/settings/useSettings';
 
 const PageContainer = styled.div`
   min-height: 100vh;
@@ -81,7 +82,8 @@ const PaginationContainer = styled.div`
 function ExploreCabins() {
   const { cabinId } = useParams();
   const [searchParams] = useSearchParams();
-  const { cabins, isLoading, error } = useCabins();
+  const { cabins, isLoading: isLoadingCabins, error: cabinsError } = useCabins();
+  const { settings, isLoading: isLoadingSettings, error: settingsError } = useSettings();
   const [selectedCabin, setSelectedCabin] = useState(null);
 
   // Get current page from URL search params
@@ -115,7 +117,7 @@ function ExploreCabins() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentPage]);
 
-  if (isLoading) {
+  if (isLoadingCabins || isLoadingSettings) {
     return (
       <PageContainer>
         <Navbar />
@@ -126,12 +128,12 @@ function ExploreCabins() {
     );
   }
 
-  if (error) {
+  if (cabinsError || settingsError) {
     return (
       <PageContainer>
         <Navbar />
         <ContentContainer>
-          <ErrorFallback message={`Error loading cabins: ${error.message || 'Unknown error'}`} />
+          <ErrorFallback message={`Error: ${cabinsError?.message || settingsError?.message || 'Unknown error'}`} />
         </ContentContainer>
       </PageContainer>
     );
@@ -167,7 +169,7 @@ function ExploreCabins() {
               </MainContent>
 
               <SideContent>
-                <CabinBookingCard cabin={selectedCabin} />
+                <CabinBookingCard cabin={selectedCabin} settings={settings} isLoadingSettings={isLoadingSettings} settingsError={settingsError} />
               </SideContent>
             </ContentGrid>
 
