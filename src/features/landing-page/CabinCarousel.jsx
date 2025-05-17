@@ -1,5 +1,8 @@
 import { useRef } from 'react';
 import styled from 'styled-components';
+import { useCabins } from '../../features/cabins/useCabins';
+import Spinner from '../../ui/Spinner';
+import ErrorFallback from '../../ui/ErrorFallback';
 
 const CarouselSection = styled.section`
   padding: 6rem 4rem;
@@ -148,17 +151,16 @@ const RightArrow = styled(ArrowButton)`
   right: 10px;
 `;
 
+const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 22rem;
+`;
+
 function CabinsCarousel() {
   const scrollRef = useRef(null);
-
-  const cabins = [
-    { id: 1, name: 'Rustic Retreat', img: '/cabin-001.jpg' },
-    { id: 2, name: 'Forest Haven', img: '/cabin-002.jpg' },
-    { id: 3, name: 'Mountain View', img: '/cabin-003.jpg' },
-    { id: 4, name: 'Lakeside Cabin', img: '/cabin-004.jpg' },
-    { id: 5, name: 'Woodland Escape', img: '/cabin-005.jpg' },
-    { id: 6, name: 'Pine Valley Lodge', img: '/cabin-006.jpg' },
-  ];
+  const { cabins, isLoading, error } = useCabins();
 
   const scrollLeft = () => {
     if (scrollRef.current) {
@@ -172,6 +174,35 @@ function CabinsCarousel() {
     }
   };
 
+  if (isLoading) {
+    return (
+      <CarouselSection id="cabins">
+        <CarouselTitle>Cabin Kami</CarouselTitle>
+        <LoadingContainer>
+          <Spinner />
+        </LoadingContainer>
+      </CarouselSection>
+    );
+  }
+
+  if (error) {
+    return (
+      <CarouselSection id="cabins">
+        <CarouselTitle>Cabin Kami</CarouselTitle>
+        <ErrorFallback message={`Error loading cabins: ${error.message || 'Unknown error'}`} />
+      </CarouselSection>
+    );
+  }
+
+  if (!cabins || cabins.length === 0) {
+    return (
+      <CarouselSection id="cabins">
+        <CarouselTitle>Cabin Kami</CarouselTitle>
+        <ErrorFallback message="No cabins found. Please try again later." />
+      </CarouselSection>
+    );
+  }
+
   return (
     <CarouselSection id="cabins">
       <CarouselTitle>Cabin Kami</CarouselTitle>
@@ -180,7 +211,7 @@ function CabinsCarousel() {
         <Images ref={scrollRef}>
           {cabins.map((cabin) => (
             <ImageContainer key={cabin.id}>
-              <ImageCard src={cabin.img} aria-label={cabin.name} />
+              <ImageCard src={cabin.image || '/default-cabin.jpg'} aria-label={cabin.name} />
               <CabinName>{cabin.name}</CabinName>
             </ImageContainer>
           ))}
