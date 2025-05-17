@@ -161,8 +161,10 @@ const ExploreButton = styled(Link)`
 const ScrollIndicator = styled.div`
   position: absolute;
   bottom: 3rem;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: fit-content;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -255,7 +257,7 @@ function Hero() {
           <BookingButton to="/booking-now">
             <span>Booking Sekarang</span>
           </BookingButton>
-          <ExploreButton to="/explore-cabin">
+          <ExploreButton to="/booking-now">
             <span>Jelajahi Cabin</span>
           </ExploreButton>
         </ButtonContainer>
