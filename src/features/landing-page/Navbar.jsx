@@ -54,6 +54,7 @@ const NavLinks = styled.ul`
     color: var(--color-blue-700);
     position: relative;
     transition: all 0.3s ease;
+    text-decoration: none;
 
     &::after {
       content: '';
@@ -141,6 +142,7 @@ const MobileNavLinks = styled.ul`
     padding: 1rem 0;
     border-bottom: 1px solid var(--color-grey-200);
     display: block;
+    text-decoration: none;
 
     &:hover {
       color: var(--color-brand-500);
@@ -211,13 +213,19 @@ function Navbar() {
               <Link to="/">Home</Link>
             </li>
             <li>
-              <Link to="#cabins">Cabin</Link>
+              <Link to="/explore-cabin">Cabin</Link>
             </li>
             <li>
-              <Link to="#about">About</Link>
+              <Link to="/booking-now">Booking</Link>
             </li>
             <li>
-              <Link to="#testimonials">Testimonials</Link>
+              <a href="#about">About</a>
+            </li>
+            <li>
+              <a href="#testimonials">Testimonials</a>
+            </li>
+            <li>
+              <a href="#contact-us">Contact Us</a>
             </li>
           </NavLinks>
         </LeftSection>
@@ -247,19 +255,29 @@ function Navbar() {
             </Link>
           </li>
           <li>
-            <Link to="#cabins" onClick={closeMobileMenu}>
+            <Link to="/explore-cabin" onClick={closeMobileMenu}>
               Cabin
             </Link>
           </li>
           <li>
-            <Link to="#about" onClick={closeMobileMenu}>
-              About
+            <Link to="/booking-now" onClick={closeMobileMenu}>
+              Booking
             </Link>
           </li>
           <li>
-            <Link to="#testimonials" onClick={closeMobileMenu}>
+            <a href="#about" onClick={closeMobileMenu}>
+              About
+            </a>
+          </li>
+          <li>
+            <a href="#testimonials" onClick={closeMobileMenu}>
               Testimonials
-            </Link>
+            </a>
+          </li>
+          <li>
+            <a href="#contact-us" onClick={closeMobileMenu}>
+              Contact Us
+            </a>
           </li>
           <li>
             <Link to="/login" onClick={closeMobileMenu}>

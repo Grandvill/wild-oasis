@@ -135,7 +135,7 @@ const ContactInfo = styled.div`
 
 function ContactUs() {
   return (
-    <ContactSection>
+    <ContactSection id="contact-us">
       <ContactTitle>Contact Us</ContactTitle>
       <ContactContainer>
         <FormContainer>

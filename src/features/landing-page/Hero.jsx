@@ -257,7 +257,7 @@ function Hero() {
           <BookingButton to="/booking-now">
             <span>Booking Sekarang</span>
           </BookingButton>
-          <ExploreButton to="/booking-now">
+          <ExploreButton to="/explore-cabin">
             <span>Jelajahi Cabin</span>
           </ExploreButton>
         </ButtonContainer>
