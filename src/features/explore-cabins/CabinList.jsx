@@ -2,7 +2,7 @@
 
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import AnimatedSection from '../landing-page/AnimatedSection';
 
 const CabinsGrid = styled.div`
@@ -95,9 +95,16 @@ const ViewButton = styled(Link)`
 `;
 
 function CabinList({ cabins, currentCabinId }) {
+  const navigate = useNavigate();
+
   if (!cabins || cabins.length === 0) {
     return <p>No cabins available at the moment.</p>;
   }
+
+  const handleViewDetails = (cabinId) => {
+    navigate(`/explore-cabin/${cabinId}`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <AnimatedSection animation="fadeInUp" duration={0.8}>
@@ -135,8 +142,9 @@ function CabinList({ cabins, currentCabinId }) {
                   {cabin.maxCapacity || 0}
                 </Feature>
               </CabinFeatures>
-              {/* Updated to match the route in App.jsx */}
-              <ViewButton to={`/explore-cabin/${cabin.id}`}>View Details</ViewButton>
+              <ViewButton as="button" onClick={() => handleViewDetails(cabin.id)}>
+                View Details
+              </ViewButton>
             </CabinContent>
           </CabinCard>
         ))}
