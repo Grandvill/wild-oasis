@@ -250,15 +250,15 @@ function Hero() {
       </BackgroundShapes>
 
       <HeroContent>
-        <Title>Temukan Cabin Impian Anda</Title>
-        <Subtitle>Booking cabin dengan nyaman, cepat, dan aman di Wild Oasis. Nikmati pengalaman menginap yang tak terlupakan di tengah keindahan alam.</Subtitle>
+        <Title>Discover Your Dream Cabin</Title>
+        <Subtitle>Book a cabin comfortably, quickly, and safely at Wild Oasis. Enjoy an unforgettable stay amidst nature's beauty.</Subtitle>
 
         <ButtonContainer>
           <BookingButton to="/booking-now">
-            <span>Booking Sekarang</span>
+            <span>Book Now</span>
           </BookingButton>
           <ExploreButton to="/explore-cabin">
-            <span>Jelajahi Cabin</span>
+            <span>Explore Cabins</span>
           </ExploreButton>
         </ButtonContainer>
       </HeroContent>

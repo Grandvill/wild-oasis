@@ -1,4 +1,3 @@
-// components/About.jsx
 import styled from 'styled-components';
 import { useRef, useEffect } from 'react';
 import { keyframes } from 'styled-components';
@@ -143,17 +142,14 @@ function About() {
   return (
     <AboutSection id="about" ref={sectionRef}>
       <AboutContainer>
-        <AboutTitle>Tentang Wild Oasis</AboutTitle>
+        <AboutTitle>About Wild Oasis</AboutTitle>
         <AboutContent>
           <AboutText>
             <p>
-              <strong>Wild Oasis</strong> adalah platform modern yang memudahkan pengguna untuk menemukan dan memesan cabin atau hotel favorit mereka dengan mudah, cepat, dan aman.
+              <strong>Wild Oasis</strong> is a modern platform that simplifies the process of finding and booking your favorite cabins or hotels easily, quickly, and safely.
             </p>
-            <p>
-              Kami menawarkan berbagai pilihan akomodasi premium di lokasi-lokasi yang menakjubkan, dirancang untuk memberikan pengalaman menginap yang tak terlupakan. Setiap cabin kami dirancang dengan perpaduan sempurna antara kenyamanan
-              modern dan keindahan alam.
-            </p>
-            <p>Nikmati pengalaman menginap terbaik dengan layanan kami yang mengutamakan kepuasan dan kenyamanan Anda. Reservasi cepat, konfirmasi instan, dan dukungan pelanggan 24/7 adalah komitmen kami untuk Anda.</p>
+            <p>We offer a variety of premium accommodations in stunning locations, designed to provide an unforgettable stay. Each of our cabins is crafted with a perfect blend of modern comfort and natural beauty.</p>
+            <p>Enjoy the best accommodation experience with our services that prioritize your satisfaction and comfort. Fast reservations, instant confirmations, and 24/7 customer support are our commitments to you.</p>
           </AboutText>
           <ImageWrapper>
             <img src="cabin-about.jpg" alt="Wild Oasis Resort" />

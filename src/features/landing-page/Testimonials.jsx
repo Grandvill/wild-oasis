@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
 
 const TestimonialsSection = styled.section`
@@ -91,6 +91,10 @@ const TestimonialCard = styled.div`
     line-height: 1;
     opacity: 0.5;
   }
+
+  @media (max-width: 480px) {
+    flex: 0 0 300px;
+  }
 `;
 
 const TestimonialText = styled.p`
@@ -169,6 +173,12 @@ const ArrowButton = styled.button`
     opacity: 1;
     transform: translateY(-50%) scale(1.05);
   }
+
+  &:disabled {
+    background-color: var(--color-grey-300);
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 `;
 
 const LeftArrow = styled(ArrowButton)`
@@ -208,23 +218,23 @@ function Testimonials() {
   const testimonials = [
     {
       id: 1,
-      text: 'Cabin kami di The Wild Oasis benar-benar mengagumkan! Pemandangan alam yang indah dan fasilitas yang lengkap membuat liburan kami menjadi sangat berkesan. Kami pasti akan kembali lagi.',
+      text: 'Our cabin at The Wild Oasis was truly amazing! The beautiful natural scenery and complete facilities made our vacation so memorable. We will definitely come back.',
       name: 'Budi Santoso',
-      title: 'Pengunjung Setia',
+      title: 'Loyal Visitor',
       avatar: '/default-user.jpg',
       rating: 5,
     },
     {
       id: 2,
-      text: 'Pengalaman menginap di cabin yang tenang dan damai. Staff sangat ramah dan membantu. Kebersihan kabin terjaga dengan sangat baik dan pemandangan sekitar sungguh menakjubkan.',
+      text: 'A peaceful and serene stay at the cabin. The staff were very friendly and helpful. The cabin’s cleanliness was well-maintained, and the surrounding views were truly breathtaking.',
       name: 'Siti Nuraini',
-      title: 'Pecinta Alam',
+      title: 'Nature Lover',
       avatar: '/default-user.jpg',
       rating: 5,
     },
     {
       id: 3,
-      text: 'Saya sangat merekomendasikan The Wild Oasis untuk retreat keluarga. Suasana alamnya memberikan energi positif dan cabin-nya sangat nyaman. Anak-anak sangat menikmati waktu bermain di sekitar cabin.',
+      text: 'I highly recommend The Wild Oasis for a family retreat. The natural atmosphere provided positive energy, and the cabin was very comfortable. The kids really enjoyed playing around the cabin.',
       name: 'Ahmad Fauzi',
       title: 'Family Traveler',
       avatar: '/default-user.jpg',
@@ -232,7 +242,7 @@ function Testimonials() {
     },
     {
       id: 4,
-      text: 'Tempat yang sempurna untuk melarikan diri dari hiruk pikuk kota. Desain cabin yang modern namun tetap harmonis dengan alam membuat pengalaman menginap saya menjadi istimewa.',
+      text: 'The perfect place to escape the hustle and bustle of the city. The modern cabin design, yet harmonious with nature, made my stay truly special.',
       name: 'Dian Purnama',
       title: 'Urban Explorer',
       avatar: '/default-user.jpg',
@@ -240,7 +250,7 @@ function Testimonials() {
     },
     {
       id: 5,
-      text: 'Selama saya traveling ke berbagai tempat, The Wild Oasis adalah salah satu akomodasi terbaik yang pernah saya temui. Cabin dengan pemandangan yang luar biasa dan fasilitas yang lengkap.',
+      text: 'Throughout my travels to various places, The Wild Oasis is one of the best accommodations I’ve ever experienced. A cabin with extraordinary views and complete facilities.',
       name: 'Rini Sulistyowati',
       title: 'Travel Blogger',
       avatar: '/default-user.jpg',
@@ -250,57 +260,72 @@ function Testimonials() {
 
   // Auto scroll functionality
   useEffect(() => {
+    if (testimonials.length === 0) return;
+
     let interval;
     if (isAutoScrolling) {
       interval = setInterval(() => {
-        scrollToIndex((activeIndex + 1) % testimonials.length);
+        setActiveIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
       }, 5000);
     }
     return () => clearInterval(interval);
-  }, [activeIndex, isAutoScrolling, testimonials.length]);
+  }, [isAutoScrolling, testimonials.length]);
 
-  const scrollToIndex = (index) => {
-    setActiveIndex(index);
+  const scrollToIndex = useCallback((index) => {
     if (scrollRef.current) {
-      const cardWidth = 360 + 24; // card width + gap
-      scrollRef.current.scrollTo({
-        left: index * cardWidth,
-        behavior: 'smooth',
-      });
+      const card = scrollRef.current.children[index];
+      if (card) {
+        const cardWidth = card.offsetWidth + 30; // Card width + gap
+        scrollRef.current.scrollTo({
+          left: index * cardWidth,
+          behavior: 'smooth',
+        });
+      }
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    scrollToIndex(activeIndex);
+  }, [activeIndex, scrollToIndex]);
 
   const scrollLeft = () => {
     setIsAutoScrolling(false);
-    const newIndex = Math.max(0, activeIndex - 1);
-    scrollToIndex(newIndex);
+    setActiveIndex((prevIndex) => Math.max(0, prevIndex - 1));
   };
 
   const scrollRight = () => {
     setIsAutoScrolling(false);
-    const newIndex = Math.min(testimonials.length - 1, activeIndex + 1);
-    scrollToIndex(newIndex);
+    setActiveIndex((prevIndex) => Math.min(testimonials.length - 1, prevIndex + 1));
   };
 
-  // Handle scroll events to update active index
-  useEffect(() => {
-    const handleScroll = () => {
+  // Debounced scroll handler
+  const debounce = (func, delay) => {
+    let timeout;
+    return (...args) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(...args), delay);
+    };
+  };
+
+  const handleScroll = useCallback(
+    debounce(() => {
       if (scrollRef.current) {
-        const cardWidth = 360 + 24; // card width + gap
+        const cardWidth = scrollRef.current.children[0]?.offsetWidth + 30 || 384; // Default to 360 + 24 if no children
         const scrollPosition = scrollRef.current.scrollLeft;
         const newIndex = Math.round(scrollPosition / cardWidth);
-        if (newIndex !== activeIndex) {
-          setActiveIndex(newIndex);
-        }
+        setActiveIndex(newIndex);
       }
-    };
+    }, 100),
+    []
+  );
 
+  useEffect(() => {
     const scrollElement = scrollRef.current;
     if (scrollElement) {
       scrollElement.addEventListener('scroll', handleScroll);
       return () => scrollElement.removeEventListener('scroll', handleScroll);
     }
-  }, [activeIndex]);
+  }, [handleScroll]);
 
   // Generate stars based on rating
   const renderStars = (rating) => {
@@ -309,20 +334,31 @@ function Testimonials() {
       .map((_, i) => <span key={i}>{i < rating ? '★' : '☆'}</span>);
   };
 
+  if (testimonials.length === 0) {
+    return (
+      <TestimonialsSection id="testimonials">
+        <TestimonialsTitle>What They Say</TestimonialsTitle>
+        <TestimonialsContainer>
+          <p style={{ textAlign: 'center', color: 'var(--color-grey-600)' }}>No testimonials available at the moment.</p>
+        </TestimonialsContainer>
+      </TestimonialsSection>
+    );
+  }
+
   return (
     <TestimonialsSection id="testimonials">
-      <TestimonialsTitle>Apa Kata Mereka?</TestimonialsTitle>
+      <TestimonialsTitle>What They Say</TestimonialsTitle>
       <TestimonialsContainer>
-        <LeftArrow onClick={scrollLeft} aria-label="Previous testimonial">
+        <LeftArrow onClick={scrollLeft} aria-label="Previous testimonial" disabled={activeIndex === 0}>
           ←
         </LeftArrow>
-        <TestimonialsList ref={scrollRef} onMouseEnter={() => setIsAutoScrolling(false)} onMouseLeave={() => setIsAutoScrolling(true)}>
+        <TestimonialsList ref={scrollRef} onMouseEnter={() => setIsAutoScrolling(false)} onMouseLeave={() => setIsAutoScrolling(true)} role="region" aria-label="Testimonials carousel">
           {testimonials.map((testimonial) => (
-            <TestimonialCard key={testimonial.id}>
+            <TestimonialCard key={testimonial.id} role="article" aria-label={`Testimonial by ${testimonial.name}`}>
               <Stars>{renderStars(testimonial.rating)}</Stars>
               <TestimonialText>{testimonial.text}</TestimonialText>
               <TestimonialAuthor>
-                <AuthorImage src={testimonial.avatar} />
+                <AuthorImage src={testimonial.avatar} aria-label={`Avatar of ${testimonial.name}`} />
                 <AuthorInfo>
                   <AuthorName>{testimonial.name}</AuthorName>
                   <AuthorTitle>{testimonial.title}</AuthorTitle>
@@ -331,7 +367,7 @@ function Testimonials() {
             </TestimonialCard>
           ))}
         </TestimonialsList>
-        <RightArrow onClick={scrollRight} aria-label="Next testimonial">
+        <RightArrow onClick={scrollRight} aria-label="Next testimonial" disabled={activeIndex === testimonials.length - 1}>
           →
         </RightArrow>
       </TestimonialsContainer>
@@ -342,9 +378,10 @@ function Testimonials() {
             active={index === activeIndex}
             onClick={() => {
               setIsAutoScrolling(false);
-              scrollToIndex(index);
+              setActiveIndex(index);
             }}
             aria-label={`Go to testimonial ${index + 1}`}
+            aria-current={index === activeIndex ? 'true' : 'false'}
           />
         ))}
       </ProgressDots>

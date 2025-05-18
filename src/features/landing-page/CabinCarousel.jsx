@@ -177,7 +177,7 @@ function CabinsCarousel() {
   if (isLoading) {
     return (
       <CarouselSection id="cabins">
-        <CarouselTitle>Cabin Kami</CarouselTitle>
+        <CarouselTitle>Our Cabins</CarouselTitle>
         <LoadingContainer>
           <Spinner />
         </LoadingContainer>
@@ -188,7 +188,7 @@ function CabinsCarousel() {
   if (error) {
     return (
       <CarouselSection id="cabins">
-        <CarouselTitle>Cabin Kami</CarouselTitle>
+        <CarouselTitle>Our Cabins</CarouselTitle>
         <ErrorFallback message={`Error loading cabins: ${error.message || 'Unknown error'}`} />
       </CarouselSection>
     );
@@ -197,7 +197,7 @@ function CabinsCarousel() {
   if (!cabins || cabins.length === 0) {
     return (
       <CarouselSection id="cabins">
-        <CarouselTitle>Cabin Kami</CarouselTitle>
+        <CarouselTitle>Our Cabins</CarouselTitle>
         <ErrorFallback message="No cabins found. Please try again later." />
       </CarouselSection>
     );
@@ -205,7 +205,7 @@ function CabinsCarousel() {
 
   return (
     <CarouselSection id="cabins">
-      <CarouselTitle>Cabin Kami</CarouselTitle>
+      <CarouselTitle>Our Cabins</CarouselTitle>
       <CarouselWrapper>
         <LeftArrow onClick={scrollLeft}>←</LeftArrow>
         <Images ref={scrollRef}>
