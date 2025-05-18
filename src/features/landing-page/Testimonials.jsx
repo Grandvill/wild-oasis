@@ -71,9 +71,10 @@ const TestimonialCard = styled.div`
   box-shadow: var(--shadow-md);
   transition: all 0.3s ease;
   position: relative;
-  will-change: transform;
-  border: 1px solid var(--color-grey-200);
-  backdrop-filter: blur(10px);
+  min-height: 400px; /* Fixed minimum height to ensure consistent bottom alignment */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   &:hover {
     transform: translateY(-8px);
@@ -94,7 +95,12 @@ const TestimonialCard = styled.div`
 
   @media (max-width: 480px) {
     flex: 0 0 300px;
+    min-height: 350px; /* Adjusted for smaller screens */
   }
+`;
+
+const TestimonialContent = styled.div`
+  flex-grow: 1;
 `;
 
 const TestimonialText = styled.p`
@@ -109,8 +115,10 @@ const TestimonialText = styled.p`
 
 const TestimonialAuthor = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
-  margin-top: 2rem;
+  margin-top: auto; /* Pushes author section to the bottom */
+  padding-top: 1rem; /* Space above author section */
 `;
 
 const AuthorImage = styled.div`
@@ -120,7 +128,7 @@ const AuthorImage = styled.div`
   background-image: ${(props) => `url(${props.src})`};
   background-size: cover;
   background-position: center;
-  margin-right: 1.5rem;
+  margin-bottom: 1rem;
   border: 2px solid var(--color-brand-100);
   box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
 `;
@@ -128,6 +136,8 @@ const AuthorImage = styled.div`
 const AuthorInfo = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
 `;
 
 const AuthorName = styled.span`
@@ -355,8 +365,10 @@ function Testimonials() {
         <TestimonialsList ref={scrollRef} onMouseEnter={() => setIsAutoScrolling(false)} onMouseLeave={() => setIsAutoScrolling(true)} role="region" aria-label="Testimonials carousel">
           {testimonials.map((testimonial) => (
             <TestimonialCard key={testimonial.id} role="article" aria-label={`Testimonial by ${testimonial.name}`}>
-              <Stars>{renderStars(testimonial.rating)}</Stars>
-              <TestimonialText>{testimonial.text}</TestimonialText>
+              <TestimonialContent>
+                <Stars>{renderStars(testimonial.rating)}</Stars>
+                <TestimonialText>{testimonial.text}</TestimonialText>
+              </TestimonialContent>
               <TestimonialAuthor>
                 <AuthorImage src={testimonial.avatar} aria-label={`Avatar of ${testimonial.name}`} />
                 <AuthorInfo>
