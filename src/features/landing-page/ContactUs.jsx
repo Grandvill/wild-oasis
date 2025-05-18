@@ -42,28 +42,21 @@ const ContactContainer = styled.div`
   width: 100%;
   max-width: 120rem;
   margin: 0 auto;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 5rem;
-  flex-wrap: wrap;
+  align-items: stretch;
 
   @media (max-width: 768px) {
-    flex-direction: column;
+    grid-template-columns: 1fr;
     gap: 2rem;
   }
 `;
 
 const FormContainer = styled.div`
-  flex: 1;
-  min-width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-
-  @media (min-width: 769px) {
-    min-width: 300px;
-  }
 `;
 
 const Input = styled.input`
@@ -105,28 +98,27 @@ const TextArea = styled.textarea`
 `;
 
 const MapContainer = styled.div`
-  flex: 1;
-  min-width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-
-  @media (min-width: 769px) {
-    min-width: 300px;
-  }
 `;
 
 const Iframe = styled.iframe`
   width: 100%;
-  height: clamp(200px, 40vh, 400px);
+  height: 100%; /* Fill the container height */
   border: 0;
   border-radius: 8px;
+  min-height: 300px; /* Minimum height for mobile */
+  @media (min-width: 769px) {
+    min-height: 400px; /* Increased height for desktop */
+  }
 `;
 
 const ContactInfo = styled.div`
   font-size: 1rem;
   color: var(--color-grey-700);
   line-height: 1.6;
+  padding: 1rem 0;
 
   p {
     margin: 0.5rem 0;
@@ -146,15 +138,16 @@ function ContactUs() {
         </FormContainer>
         <MapContainer>
           <Iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.086536722418!2d-122.41941568468101!3d37.77492977975966!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085808f5b7c2d1f%3A0x9c5b9d2a2d8e8e5!2sSan%20Francisco%2C%20CA%2C%20USA!5e0!3m2!1sen!2sus!4v1634567890123!5m2!1sen!2sus"
+            title="Location map of Sudirman Central Business District, Jakarta"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1983.1448856415748!2d106.80903365084428!3d-6.225472217181521!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5394cf4b8d7%3A0x507e0f6507ec0c!2sSudirman%20Central%20Business%20District!5e0!3m2!1sid!2sid!4v1747553315927!5m2!1sid!2sid"
             allowFullScreen=""
             loading="lazy"
           />
           <ContactInfo>
             <p>Where to find us</p>
-            <p>577 Bellevue Avenue</p>
-            <p>Malden, MA 02148</p>
-            <p> wildoasis@gmail.com </p>
+            <p>Sudirman Central Business District</p>
+            <p>Jakarta, Indonesia</p>
+            <p>zahidan23@gmail.com</p>
             <p>+1 222-345-0000</p>
           </ContactInfo>
         </MapContainer>
