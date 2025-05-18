@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import Button from '../../ui/Button';
 import { useState } from 'react';
 import emailjs from 'emailjs-com';
+import toast from 'react-hot-toast';
 
 const ContactSection = styled.section`
   padding: 6rem 2rem;
@@ -127,20 +128,12 @@ const ContactInfo = styled.div`
   }
 `;
 
-const StatusMessage = styled.p`
-  font-size: 1rem;
-  text-align: center;
-  margin-top: 1rem;
-  color: ${(props) => (props.success ? 'var(--color-brand-600)' : 'var(--color-red-700)')};
-`;
-
 function ContactUs() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     message: '',
   });
-  const [status, setStatus] = useState({ message: '', success: null });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -150,13 +143,22 @@ function ContactUs() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Use environment variables with fallback check
     const serviceID = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'default_service_id';
     const templateID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'default_template_id';
     const userID = import.meta.env.VITE_EMAILJS_USER_ID || 'default_user_id';
 
     if (serviceID === 'default_service_id' || templateID === 'default_template_id' || userID === 'default_user_id') {
-      setStatus({ message: 'EmailJS configuration is missing. Please contact support.', success: false });
+      toast.error('EmailJS configuration is missing. Please contact support.', {
+        duration: 5000,
+        style: {
+          fontSize: '16px',
+          maxWidth: '500px',
+          padding: '16px 24px',
+          background: '#EF4444',
+          color: '#fff',
+          fontWeight: '500',
+        },
+      });
       return;
     }
 
@@ -170,11 +172,31 @@ function ContactUs() {
     emailjs
       .send(serviceID, templateID, templateParams, userID)
       .then((response) => {
-        setStatus({ message: 'Message sent successfully!', success: true });
+        toast.success('Message sent successfully!', {
+          duration: 4000,
+          style: {
+            fontSize: '16px',
+            maxWidth: '500px',
+            padding: '16px 24px',
+            background: '#10B981',
+            color: '#fff',
+            fontWeight: '500',
+          },
+        });
         setFormData({ name: '', email: '', message: '' }); // Reset form
       })
       .catch((error) => {
-        setStatus({ message: 'Failed to send message. Please try again.', success: false });
+        toast.error('Failed to send message. Please try again.', {
+          duration: 5000,
+          style: {
+            fontSize: '16px',
+            maxWidth: '500px',
+            padding: '16px 24px',
+            background: '#EF4444',
+            color: '#fff',
+            fontWeight: '500',
+          },
+        });
         console.error('EmailJS Error:', error);
       });
   };
@@ -190,7 +212,6 @@ function ContactUs() {
           <Button variation="primary" onClick={handleSubmit}>
             Send
           </Button>
-          {status.message && <StatusMessage success={status.success}>{status.message}</StatusMessage>}
         </FormContainer>
         <MapContainer>
           <Iframe
