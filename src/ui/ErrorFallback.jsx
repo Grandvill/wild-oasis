@@ -46,7 +46,6 @@ function ErrorFallback({ error, message, resetErrorBoundary }) {
       <StyledErrorFallback>
         <Box>
           <Heading as="h1">Something went wrong😓</Heading>
-          <p>{displayMessage}</p>
           {resetErrorBoundary && (
             <Button size="large" onClick={resetErrorBoundary}>
               Try again
