@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import Button from '../../ui/Button';
+import { useState } from 'react';
+import emailjs from 'emailjs-com';
 
 const ContactSection = styled.section`
   padding: 6rem 2rem;
@@ -105,12 +107,12 @@ const MapContainer = styled.div`
 
 const Iframe = styled.iframe`
   width: 100%;
-  height: 100%; /* Fill the container height */
+  height: 100%;
   border: 0;
   border-radius: 8px;
-  min-height: 300px; /* Minimum height for mobile */
+  min-height: 300px;
   @media (min-width: 769px) {
-    min-height: 400px; /* Increased height for desktop */
+    min-height: 400px;
   }
 `;
 
@@ -125,16 +127,70 @@ const ContactInfo = styled.div`
   }
 `;
 
+const StatusMessage = styled.p`
+  font-size: 1rem;
+  text-align: center;
+  margin-top: 1rem;
+  color: ${(props) => (props.success ? 'var(--color-brand-600)' : 'var(--color-red-700)')};
+`;
+
 function ContactUs() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: '',
+  });
+  const [status, setStatus] = useState({ message: '', success: null });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Use environment variables with fallback check
+    const serviceID = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'default_service_id';
+    const templateID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'default_template_id';
+    const userID = import.meta.env.VITE_EMAILJS_USER_ID || 'default_user_id';
+
+    if (serviceID === 'default_service_id' || templateID === 'default_template_id' || userID === 'default_user_id') {
+      setStatus({ message: 'EmailJS configuration is missing. Please contact support.', success: false });
+      return;
+    }
+
+    const templateParams = {
+      name: formData.name,
+      email: formData.email,
+      message: formData.message,
+      to_email: 'zahidan23@gmail.com',
+    };
+
+    emailjs
+      .send(serviceID, templateID, templateParams, userID)
+      .then((response) => {
+        setStatus({ message: 'Message sent successfully!', success: true });
+        setFormData({ name: '', email: '', message: '' }); // Reset form
+      })
+      .catch((error) => {
+        setStatus({ message: 'Failed to send message. Please try again.', success: false });
+        console.error('EmailJS Error:', error);
+      });
+  };
+
   return (
     <ContactSection id="contact-us">
       <ContactTitle>Contact Us</ContactTitle>
       <ContactContainer>
         <FormContainer>
-          <Input type="text" placeholder="Full name" />
-          <Input type="email" placeholder="E-mail" />
-          <TextArea placeholder="Message" />
-          <Button variation="primary">Send</Button>
+          <Input type="text" name="name" placeholder="Full name" value={formData.name} onChange={handleChange} required />
+          <Input type="email" name="email" placeholder="E-mail" value={formData.email} onChange={handleChange} required />
+          <TextArea name="message" placeholder="Message" value={formData.message} onChange={handleChange} required />
+          <Button variation="primary" onClick={handleSubmit}>
+            Send
+          </Button>
+          {status.message && <StatusMessage success={status.success}>{status.message}</StatusMessage>}
         </FormContainer>
         <MapContainer>
           <Iframe
