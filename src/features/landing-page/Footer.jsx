@@ -219,7 +219,7 @@ function Footer() {
             <FooterHeading>Contact Us</FooterHeading>
             <ContactItem>
               <ContactIcon>📍</ContactIcon>
-              <span>577 Bellevue Avenue, Malden, MA 02148</span>
+              <span>Sudirman Central Business District, Jakarta, Indonesia</span>
             </ContactItem>
             <ContactItem>
               <ContactIcon>📞</ContactIcon>
@@ -227,7 +227,7 @@ function Footer() {
             </ContactItem>
             <ContactItem>
               <ContactIcon>✉️</ContactIcon>
-              <span>wildoasis@gmail.com</span>
+              <span>zahidan23@gmail.com</span>
             </ContactItem>
             <ContactItem>
               <ContactIcon>⏰</ContactIcon>
