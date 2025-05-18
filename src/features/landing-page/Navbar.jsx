@@ -7,7 +7,9 @@ import Logo from '../../ui/Logo';
 import DarkModeToggle from '../../ui/DarkModeToggle';
 import Button from '../../ui/Button';
 
-const Nav = styled.nav`
+const Nav = styled.nav.withConfig({
+  shouldForwardProp: (prop) => prop !== 'scrolled',
+})`
   position: fixed;
   top: 0;
   width: 100%;
@@ -114,7 +116,9 @@ const MobileMenuButton = styled.button`
   }
 `;
 
-const MobileMenu = styled.div`
+const MobileMenu = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== 'isOpen',
+})`
   position: fixed;
   top: 0;
   right: ${(props) => (props.isOpen ? '0' : '-100%')};
@@ -162,7 +166,9 @@ const CloseButton = styled.button`
   cursor: pointer;
 `;
 
-const Overlay = styled.div`
+const Overlay = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== 'isOpen',
+})`
   position: fixed;
   top: 0;
   left: 0;

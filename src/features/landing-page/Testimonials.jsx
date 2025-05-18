@@ -362,6 +362,7 @@ function Testimonials() {
         <LeftArrow onClick={scrollLeft} aria-label="Previous testimonial" disabled={activeIndex === 0}>
           ←
         </LeftArrow>
+
         <TestimonialsList ref={scrollRef} onMouseEnter={() => setIsAutoScrolling(false)} onMouseLeave={() => setIsAutoScrolling(true)} role="region" aria-label="Testimonials carousel">
           {testimonials.map((testimonial) => (
             <TestimonialCard key={testimonial.id} role="article" aria-label={`Testimonial by ${testimonial.name}`}>
@@ -379,24 +380,25 @@ function Testimonials() {
             </TestimonialCard>
           ))}
         </TestimonialsList>
+
         <RightArrow onClick={scrollRight} aria-label="Next testimonial" disabled={activeIndex === testimonials.length - 1}>
           →
         </RightArrow>
+
+        <ProgressDots>
+          {testimonials.map((_, index) => (
+            <ProgressDot
+              key={index}
+              active={index === activeIndex}
+              onClick={() => {
+                setIsAutoScrolling(false);
+                setActiveIndex(index);
+              }}
+              aria-label={`Go to testimonial ${index + 1}`}
+            />
+          ))}
+        </ProgressDots>
       </TestimonialsContainer>
-      <ProgressDots>
-        {testimonials.map((_, index) => (
-          <ProgressDot
-            key={index}
-            active={index === activeIndex}
-            onClick={() => {
-              setIsAutoScrolling(false);
-              setActiveIndex(index);
-            }}
-            aria-label={`Go to testimonial ${index + 1}`}
-            aria-current={index === activeIndex ? 'true' : 'false'}
-          />
-        ))}
-      </ProgressDots>
     </TestimonialsSection>
   );
 }
