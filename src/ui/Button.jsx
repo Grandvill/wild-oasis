@@ -18,6 +18,15 @@ const sizes = {
     padding: 1.2rem 2.4rem;
     font-weight: 500;
   `,
+  login: css`
+    padding: 0.8rem 1.6rem;
+    border-radius: var(--border-radius-sm);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.4rem;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+  `,
 };
 
 const variations = {
@@ -27,6 +36,7 @@ const variations = {
 
     &:hover {
       background-color: var(--color-brand-700);
+      transform: translateY(-2px);
     }
   `,
   secondary: css`
@@ -36,6 +46,7 @@ const variations = {
 
     &:hover {
       background-color: var(--color-grey-50);
+      transform: translateY(-2px);
     }
   `,
   danger: css`
@@ -44,6 +55,7 @@ const variations = {
 
     &:hover {
       background-color: var(--color-red-800);
+      transform: translateY(-2px);
     }
   `,
   warning: css`
@@ -52,6 +64,7 @@ const variations = {
 
     &:hover {
       background-color: #facc15; // amber-300
+      transform: translateY(-2px);
     }
   `,
 };

@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Logo from '../../ui/Logo';
 import DarkModeToggle from '../../ui/DarkModeToggle';
+import Button from '../../ui/Button';
 
 const Nav = styled.nav`
   position: fixed;
@@ -83,22 +84,22 @@ const RightSection = styled.div`
   gap: 1.2rem;
 `;
 
-const LoginButton = styled(Link)`
-  background-color: var(--color-brand-600);
-  color: var(--color-grey-0);
-  padding: 0.8rem 1.6rem;
-  border-radius: var(--border-radius-sm);
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1.4rem;
-  box-shadow: var(--shadow-md);
-  transition: all 0.3s ease;
+// const LoginButton = styled(Link)`
+//   background-color: var(--color-brand-600);
+//   color: var(--color-grey-0);
+//   padding: 0.8rem 1.6rem;
+//   border-radius: var(--border-radius-sm);
+//   text-decoration: none;
+//   font-weight: 600;
+//   font-size: 1.4rem;
+//   box-shadow: var(--shadow-md);
+//   transition: all 0.3s ease;
 
-  &:hover {
-    background-color: var(--color-brand-700);
-    transform: translateY(-2px);
-  }
-`;
+//   &:hover {
+//     background-color: var(--color-brand-700);
+//     transform: translateY(-2px);
+//   }
+// `;
 
 const MobileMenuButton = styled.button`
   display: none;
@@ -269,7 +270,9 @@ function Navbar() {
 
         <RightSection>
           <DarkModeToggle />
-          <LoginButton to="/login">Login</LoginButton>
+          <Button as={Link} size="login" variation="primary" to="/login">
+            Login
+          </Button>
           <MobileMenuButton onClick={toggleMobileMenu} aria-label="Open menu">
             ☰
           </MobileMenuButton>
