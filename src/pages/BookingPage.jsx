@@ -59,14 +59,12 @@ function BookingPage() {
     hasBreakfast: false,
   });
 
-  // Move to step 2 when a cabin is selected
   useEffect(() => {
     if (selectedCabinId && activeStep < 2) {
       setActiveStep(2);
     }
   }, [selectedCabinId, activeStep]);
 
-  // Move to step 3 when all required guest info fields are filled
   useEffect(() => {
     const timer = setTimeout(() => {
       const requiredFields = ['fullName', 'email', 'nationality', 'nationalID'];
@@ -75,7 +73,7 @@ function BookingPage() {
       if (allFieldsFilled && activeStep === 2) {
         setActiveStep(3);
       }
-    }, 300); // Debounce for 300ms
+    }, 300);
 
     return () => clearTimeout(timer);
   }, [guestInfo, activeStep]);
@@ -96,7 +94,6 @@ function BookingPage() {
     setCheckOutDate(new Date(Date.now() + 86400000));
   };
 
-  // Define variables that depend on settings and cabins
   const { minBookingLength, maxBookingLength, maxGuestsPerBooking, breakfastPrice } = settings || {};
   const selectedCabinData = cabins?.find((cabin) => cabin.id === selectedCabinId) || null;
   const nights = checkInDate && checkOutDate ? differenceInDays(checkOutDate, checkInDate) : 0;
@@ -186,9 +183,7 @@ function BookingPage() {
                   guests={guests}
                   onGuestsChange={setGuests}
                 />
-
-                <CabinSelection cabins={cabins} selectedCabinId={selectedCabinId} onSelectCabin={setSelectedCabinId} />
-
+                <CabinSelection cabins={cabins} selectedCabinId={selectedCabinId} onSelectCabin={setSelectedCabinId} startDate={checkInDate} endDate={checkOutDate} />
                 {selectedCabinData ? (
                   <GuestInformation
                     guests={guests}
@@ -205,7 +200,6 @@ function BookingPage() {
                   </BookingSection>
                 )}
               </BookingFormContainer>
-
               <BookingSummaryContainer>
                 <BookingSummary
                   cabinData={selectedCabinData ? { ...selectedCabinData, price: selectedCabinData.regularPrice } : null}

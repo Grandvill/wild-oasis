@@ -54,14 +54,14 @@ export async function getStaysAfterDate(date) {
     .from('bookings')
     .select('*, guests(fullName, nationality, countryFlag)')
     .gte('startDate', date)
-    .lte('startDate', getToday({ end: true })); // Use end of day
+    .lte('startDate', getToday({ end: true }));
 
   if (error) {
     console.error('Error fetching stays:', error);
     throw new Error('Bookings could not get loaded');
   }
 
-  return data || []; // Ensure an empty array if data is undefined
+  return data || [];
 }
 
 export async function getStaysTodayActivity() {
@@ -122,4 +122,15 @@ export async function createBookingWithGuest(guestData, bookingData) {
   }
 
   return booking;
+}
+
+export async function getCabinAvailability(cabinId, startDate, endDate) {
+  const { data, error } = await supabase.from('bookings').select('id, startDate, endDate').eq('cabinId', cabinId).or(`and(startDate.lte.${endDate},endDate.gte.${startDate})`);
+
+  if (error) {
+    console.error(error);
+    throw new Error('Could not check cabin availability');
+  }
+
+  return data.length > 0; // Returns true if there are overlapping bookings
 }
