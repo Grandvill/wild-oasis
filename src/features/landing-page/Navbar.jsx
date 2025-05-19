@@ -86,23 +86,6 @@ const RightSection = styled.div`
   gap: 1.2rem;
 `;
 
-// const LoginButton = styled(Link)`
-//   background-color: var(--color-brand-600);
-//   color: var(--color-grey-0);
-//   padding: 0.8rem 1.6rem;
-//   border-radius: var(--border-radius-sm);
-//   text-decoration: none;
-//   font-weight: 600;
-//   font-size: 1.4rem;
-//   box-shadow: var(--shadow-md);
-//   transition: all 0.3s ease;
-
-//   &:hover {
-//     background-color: var(--color-brand-700);
-//     transform: translateY(-2px);
-//   }
-// `;
-
 const MobileMenuButton = styled.button`
   display: none;
   background: none;
@@ -236,7 +219,9 @@ function Navbar() {
     <>
       <Nav scrolled={scrolled}>
         <LogoWrapper>
-          <Logo />
+          <Link to="/" onClick={handleHomeClick}>
+            <Logo />
+          </Link>
         </LogoWrapper>
 
         <LeftSection>
@@ -292,7 +277,9 @@ function Navbar() {
           ✕
         </CloseButton>
         <LogoWrapper>
-          <Logo />
+          <Link to="/" onClick={handleHomeClick}>
+            <Logo />
+          </Link>
         </LogoWrapper>
         <MobileNavLinks>
           <li>
