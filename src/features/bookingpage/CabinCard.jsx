@@ -6,6 +6,8 @@ import { CabinCard as StyledCabinCard, CabinImage, CabinInfo, CabinName, CabinPr
 function CabinCard({ cabin, isSelected, onSelect, isBooked }) {
   const imageUrl = cabin.image || '';
 
+  const isMobile = () => window.innerWidth <= 768;
+
   const scrollToTop = () => {
     window.scrollTo({
       top: 500,
@@ -13,10 +15,21 @@ function CabinCard({ cabin, isSelected, onSelect, isBooked }) {
     });
   };
 
+  const scrollToBottom = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    });
+  };
+
   const handleClick = () => {
     if (!isBooked) {
       onSelect(cabin.id);
-      scrollToTop();
+      if (isMobile()) {
+        scrollToBottom();
+      } else {
+        scrollToTop();
+      }
     }
   };
 
