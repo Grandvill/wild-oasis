@@ -6,8 +6,22 @@ import { CabinCard as StyledCabinCard, CabinImage, CabinInfo, CabinName, CabinPr
 function CabinCard({ cabin, isSelected, onSelect, isBooked }) {
   const imageUrl = cabin.image || '';
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 500,
+      behavior: 'smooth',
+    });
+  };
+
+  const handleClick = () => {
+    if (!isBooked) {
+      onSelect(cabin.id);
+      scrollToTop();
+    }
+  };
+
   return (
-    <StyledCabinCard selected={isSelected} disabled={isBooked} onClick={() => !isBooked && onSelect(cabin.id)} style={isBooked ? { opacity: 0.6, cursor: 'not-allowed' } : {}}>
+    <StyledCabinCard selected={isSelected} disabled={isBooked} onClick={handleClick} style={isBooked ? { opacity: 0.6, cursor: 'not-allowed' } : {}}>
       <CabinImage image={imageUrl} />
       <CabinInfo>
         <CabinName>{cabin.name}</CabinName>

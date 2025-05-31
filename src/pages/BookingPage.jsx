@@ -27,6 +27,11 @@ const BookingGrid = styled.div`
   @media (max-width: 968px) {
     grid-template-columns: 1fr;
     gap: 20px;
+    padding: 20px 10px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 15px 5px;
   }
 `;
 
@@ -34,12 +39,30 @@ const BookingFormContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 30px;
+
+  @media (max-width: 968px) {
+    gap: 20px;
+  }
 `;
 
 const BookingSummaryContainer = styled.div`
   position: sticky;
   top: 20px;
   align-self: start;
+
+  @media (max-width: 968px) {
+    position: static;
+    top: 0;
+    width: 100%;
+    max-width: 100%;
+    padding: 0 10px; /* Add horizontal padding to prevent cutoff */
+    box-sizing: border-box; /* Ensure padding doesn’t exceed width */
+  }
+
+  @media (max-width: 360px) {
+    padding: 0 5px; /* Further reduce padding for very small screens */
+    font-size: 0.9rem; /* Slightly reduce font size for readability */
+  }
 `;
 
 function BookingPage() {
